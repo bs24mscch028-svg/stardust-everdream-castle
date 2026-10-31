@@ -775,13 +775,30 @@
     </div>
   `,
     
-  loves: `
+    loves: `
     <h2 id="modalTitle">🌷 Things I Love</h2>
-    <div class="result">
-      🌸 Flowers and soft skies<br>
-      🎧 Songs that feel like memories<br>
-      📚 Stories and imagination<br>
-      🌙 Quiet moments and unexpected magic
+    <p>A little collection of the things that make life beautiful.</p>
+
+    <div class="actions love-categories">
+      <button class="btn" type="button" data-love-category="flowers">
+        🌸 Flowers & Soft Skies
+      </button>
+
+      <button class="btn" type="button" data-love-category="films">
+        🎬 Songs & Film Memories
+      </button>
+
+      <button class="btn" type="button" data-love-category="stories">
+        📖 Stories & Imagination
+      </button>
+
+      <button class="btn" type="button" data-love-category="moments">
+        🌙 Quiet Moments & Unexpected Magic
+      </button>
+    </div>
+
+    <div id="loveCategoryContent" class="result" aria-live="polite">
+      ✨ Choose a little world above to explore it.
     </div>
   `,
 
