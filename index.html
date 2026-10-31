@@ -723,11 +723,31 @@
       `
     };
 
-    function openModal(name) {
-      content.innerHTML = templates[name] || templates.mystery;
-      backdrop.classList.add("open");
-      document.body.style.overflow = "hidden";
-    }
+   function openModal(name) {
+  if (!templates[name]) {
+    console.error("Unknown castle room:", name);
+    return;
+  }
+
+  content.innerHTML = templates[name];
+
+  // Open the room popup.
+  backdrop.classList.add("open");
+  backdrop.setAttribute("aria-hidden", "false");
+
+  // Keep the page behind the popup from scrolling.
+  document.body.style.overflow = "hidden";
+
+  // Start the popup at its beginning.
+  content.scrollTop = 0;
+  backdrop.scrollTop = 0;
+
+  // Put keyboard focus inside the popup.
+  const firstButton = content.querySelector("button");
+  if (firstButton) {
+    firstButton.focus({ preventScroll: true });
+  }
+} 
 
     function closeModal() {
       backdrop.classList.remove("open");
