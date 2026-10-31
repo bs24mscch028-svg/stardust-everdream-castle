@@ -21,9 +21,13 @@ async function verifyOwner(request, env) {
     "SELECT expires_at FROM owner_sessions WHERE token_hash = ?"
   ).bind(tokenHash).first();
 
-  return Boolean(session && session.expires_at > Date.now());
-}
+ const rawExpiry = session?.expires_at;
+const expiry = typeof rawExpiry === "number"
+  ? (rawExpiry < 1e12 ? rawExpiry * 1000 : rawExpiry)
+  : Date.parse(rawExpiry);
 
+return Number.isFinite(expiry) && expiry > Date.now(); 
+}
 const defaultTheme = {
   name: "Lavender Galaxy",
   background: "#f6f0ff",
