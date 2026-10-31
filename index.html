@@ -815,53 +815,74 @@
         const kind = kindButton.dataset.kind;
         const form = document.getElementById("mysteryForm");
 
-        if (kind === "song") {
-          form.innerHTML = `
-            <strong>🎵 Dedicate a song</strong>
-            <p>This form is a preview and will not send anything yet.</p>
-            <label class="field">Song title
-              <input placeholder="Enter the song title">
-            </label>
-            <label class="field">Artist (optional)
-              <input placeholder="Enter the artist">
-            </label>
-            <label class="field">A little note (optional)
-              <textarea placeholder="Why did you choose this song?"></textarea>
-            </label>
-          `;
-        }
+if (kind === "song") {
+  form.innerHTML = `
+    <strong>🎵 Dedicate a song</strong>
+    <p>This form is a preview and will not send anything yet.</p>
 
-        if (kind === "flower") {
-          form.innerHTML = `
-            <strong>🌸 Dedicate a flower</strong>
-            <p>This form is a preview and will not send anything yet.</p>
-            <label class="field">Choose a flower
-              <select>
-                <option>Rose 🌹</option>
-                <option>Sunflower 🌻</option>
-                <option>Tulip 🌷</option>
-                <option>Daisy 🌼</option>
-                <option>Lavender 💜</option>
-                <option>Cherry blossom 🌸</option>
-                <option>Lotus 🪷</option>
-              </select>
-            </label>
-            <label class="field">A little note (optional)
-              <textarea placeholder="Why this flower?"></textarea>
-            </label>
-          `;
-        }
+    <form id="songForm">
+      <label class="field">Song title
+        <input name="songTitle" placeholder="Enter the song title" required>
+      </label>
 
-        if (kind === "message") {
+      <label class="field">Artist (optional)
+        <input name="artist" placeholder="Enter the artist">
+      </label>
+
+      <label class="field">A little note (optional)
+        <textarea name="note" placeholder="Why did you choose this song?"></textarea>
+      </label>
+
+      <button class="btn primary" type="submit">
+        Send My Song Dedication 🎵
+      </button>
+
+      <p id="songStatus" role="status"></p>
+    </form>
+  `;
+}
+        
+if (kind === "flower") {
+  form.innerHTML = `
+    <strong>🌸 Dedicate a flower</strong>
+    <p>Send a flower with a little message from your heart.</p>
+
+    <form id="flowerForm">
+      <label class="field">Choose a flower
+        <select name="flower" required>
+          <option value="">Choose your flower</option>
+          <option value="Rose 🌹">Rose 🌹</option>
+          <option value="Sunflower 🌻">Sunflower 🌻</option>
+          <option value="Tulip 🌷">Tulip 🌷</option>
+          <option value="Daisy 🌼">Daisy 🌼</option>
+          <option value="Lavender 💜">Lavender 💜</option>
+          <option value="Cherry blossom 🌸">Cherry blossom 🌸</option>
+          <option value="Lotus 🪷">Lotus 🪷</option>
+        </select>
+      </label>
+
+      <label class="field">Your note (optional)
+        <textarea name="note" placeholder="Why did you choose this flower?"></textarea>
+      </label>
+
+      <button class="btn primary" type="submit">
+        Send My Flower Dedication 🌸
+      </button>
+
+      <p id="flowerStatus" role="status"></p>
+    </form>
+  `;
+}
+
+  if (kind === "message") {
   form.innerHTML = `
     <strong>💌 A Little Message for the Castle Keeper</strong>
-
     <p>Leave a little kindness, a thought, or a secret.</p>
 
     <form id="messageForm">
-      <label class="field">
-        Your message
+      <label class="field">Your message
         <textarea
+          name="message"
           id="visitorMessage"
           placeholder="Write your message here..."
           required
@@ -873,9 +894,7 @@
         Send My Message 💌
       </button>
 
-      <p id="messageStatus" role="status">
-        Message delivery will be available once secure storage is connected.
-      </p>
+      <p id="messageStatus" role="status"></p>
     </form>
   `;
 }
