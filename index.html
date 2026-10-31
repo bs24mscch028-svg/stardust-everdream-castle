@@ -450,7 +450,48 @@
         transition: none !important;
       }
     }
-  </style>
+ /* Make Mystery Planet form buttons visible */
+#mysteryForm form {
+  display: block;
+  width: 100%;
+}
+    
+/* Make Mystery Planet forms and Send buttons visible */
+#mysteryForm form {
+  display: block !important;
+  width: 100%;
+}
+
+#mysteryForm button[type="submit"],
+#mysteryForm form button {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 14px;
+  padding: 14px 18px;
+  border: 1px solid #d9b3e8;
+  border-radius: 14px;
+  background: #f3cce8;
+  color: #392448;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#mysteryForm button[type="submit"]:hover,
+#mysteryForm form button:hover {
+  background: #e9b8dc;
+}
+
+#mysteryForm button[type="submit"]:focus-visible {
+  outline: 3px solid #966dbb;
+  outline-offset: 3px;
+}
+ </style>
 </head>
 
 <body>
