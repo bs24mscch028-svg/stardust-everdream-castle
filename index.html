@@ -1299,6 +1299,61 @@ document.addEventListener("submit", async event => {
     if (button) button.disabled = false;
   }
 }); 
+    // Save Moonlit Memories to the database.
+  document.addEventListener("submit", async event => {
+    const form = event.target;
+
+    if (!form.matches("#moodForm")) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const mood = form.querySelector('[name="mood"]')?.value || "";
+    const note = form.querySelector('[name="note"]')?.value.trim() || "";
+    const status = document.getElementById("moodStatus");
+    const button = form.querySelector('[type="submit"]');
+
+    if (button) button.disabled = true;
+    if (status) status.textContent = "Saving your Moonlit Memory… 🌙";
+
+    try {
+      const response = await fetch("/api/moods", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ mood, note })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Your memory could not be saved.");
+      }
+
+      if (status) {
+        status.textContent = "✨ Your Moonlit Memory has been saved!";
+      }
+
+      const result = document.getElementById("moodResult");
+
+      if (result) {
+        result.textContent =
+          `🌙 You felt ${mood.toLowerCase()}. Thank you for leaving a little piece of your sky.`;
+      }
+
+      form.reset();
+    } catch (error) {
+      if (status) {
+        status.textContent =
+          error.message || "Your memory could not be saved. Please try again.";
+      }
+    } finally {
+      if (button) button.disabled = false;
+    }
+  });
 </script> 
 </body>
  <!-- Stardust Everdream Castle update -->
