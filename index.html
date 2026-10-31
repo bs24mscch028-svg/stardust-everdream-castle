@@ -524,6 +524,31 @@
   cursor: pointer;
 }
   </style>
+  <script>
+(async function loadCastleTheme() {
+  try {
+    const response = await fetch("/api/site-settings", {
+      cache: "no-store"
+    });
+
+    if (!response.ok) return;
+
+    const result = await response.json();
+    if (!result.success || !result.theme) return;
+
+    const theme = result.theme;
+    const root = document.documentElement;
+
+    root.style.setProperty("--theme-background", theme.background);
+    root.style.setProperty("--theme-surface", theme.surface);
+    root.style.setProperty("--theme-accent", theme.accent);
+    root.style.setProperty("--theme-accent2", theme.accent2);
+    root.style.setProperty("--theme-text", theme.text);
+  } catch (error) {
+    console.error("Could not load the castle theme:", error);
+  }
+})();
+</script>
 </head>
 
 <body>
