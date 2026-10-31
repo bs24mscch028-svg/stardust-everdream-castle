@@ -288,6 +288,7 @@
         );
         const songs = Array.isArray(data.songs) ? data.songs : [];
         const moods = Array.isArray(data.moods) ? data.moods : [];
+        const loveEntries = Array.isArray(data.loveEntries) ? data.loveEntries : [];
 
         showText("messageCount", anonymous.length + " anonymous messages");
         showText("flowerCount", flowers.length + " flower dedications");
