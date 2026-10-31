@@ -42,7 +42,13 @@ export async function onRequestGet({ request, env }) {
     }
 
     // Only a verified owner session can reach these private queries.
-    const [messagesResult, songsResult, moodsResult, visitsResult] =
+    const [
+  messagesResult,
+  songsResult,
+  moodsResult,
+  visitsResult,
+  loveEntriesResult
+] =
       await Promise.all([
         env.DB.prepare(
           `SELECT id, message, message_type, created_at
@@ -66,8 +72,15 @@ export async function onRequestGet({ request, env }) {
         ).all(),
 
         env.DB.prepare(
-          "SELECT COUNT(*) AS total FROM visits"
-        ).first()
+  "SELECT COUNT(*) AS total FROM visits"
+).first(),
+
+env.DB.prepare(
+  `SELECT id, category, title, content, created_at
+   FROM love_entries
+   ORDER BY id DESC
+   LIMIT 500`
+).all()
       ]);
 
     return Response.json(
