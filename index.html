@@ -1009,7 +1009,67 @@
       closeModal();
     }
   });
+// Things I Love: save entries to the database.
+document.addEventListener("click", async event => {
+  const button = event.target.closest("[data-love-save]");
+  if (!button) return;
 
+  const category = button.dataset.loveSave;
+  const message = document.getElementById("loveSaveMessage");
+
+  if (!message) return;
+
+  let title = "";
+  let content = "";
+
+  if (category === "flowers") {
+    const flower = document.getElementById("loveFlower")?.value.trim() || "";
+    const sky = document.getElementById("loveSky")?.value || "";
+
+    title = flower;
+    content = sky ? `Favourite sky: ${sky}` : "";
+  } else if (category === "films") {
+    title = document.getElementById("loveFilmTitle")?.value.trim() || "";
+    content = document.getElementById("loveFilmNote")?.value.trim() || "";
+  } else if (category === "stories") {
+    title = document.getElementById("loveStoryTitle")?.value.trim() || "";
+    content = document.getElementById("loveStoryNote")?.value.trim() || "";
+  } else if (category === "moments") {
+    title = "Quiet Moment";
+    content = document.getElementById("loveMoment")?.value.trim() || "";
+  }
+
+  if (!title && !content) {
+    message.textContent = "Please write something before saving. 🌷";
+    return;
+  }
+
+  button.disabled = true;
+  message.textContent = "Saving your little memory... ✨";
+
+  try {
+    const response = await fetch("/api/love-entries", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ category, title, content })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Could not save your entry.");
+    }
+
+    message.textContent = result.message || "Your little memory has been saved! ✨";
+  } catch (error) {
+    message.textContent = error.message || "Could not save your entry. Please try again.";
+  } finally {
+    button.disabled = false;
+  }
+});
+  
   // Handle buttons inside the Moonlit Room and Mystery Planet.
   backdrop.addEventListener("click", event => {
     const moodButton = event.target.closest("[data-mood]");
