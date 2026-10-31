@@ -1085,7 +1085,7 @@
   document.addEventListener("submit", event => {
     const form = event.target;
 
-    if (!form.matches("#songForm") || !form.closest("#backdrop")) {
+    if (!form.matches("#songForm") || !form.querySelector('[name="songArtist"]')) {
       return;
     }
 
