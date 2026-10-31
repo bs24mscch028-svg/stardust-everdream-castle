@@ -1593,6 +1593,47 @@ if (!response.ok || !data.success) {
     }
   });
 </script> 
+  <script>
+(async function recordCastleVisit() {
+  const counter = document.getElementById("counterText");
+  if (!counter) return;
+
+  try {
+    counter.textContent = "✨ Counting the stardust visitors...";
+
+    const response = await fetch("/api/visitors", {
+      method: "POST",
+      cache: "no-store"
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error("Visitor count unavailable");
+    }
+
+    const total = Number(result.total) || 0;
+
+    counter.textContent =
+      `✨ ${total.toLocaleString()} recorded visits to our magical castle!`;
+
+    const milestones = [100, 250, 500, 1000];
+    const nextMilestone = milestones.find(milestone => total < milestone);
+
+    if (nextMilestone) {
+      counter.textContent +=
+        ` Only ${Math.max(0, nextMilestone - total)} more visits until our next milestone!`;
+    } else {
+      counter.textContent +=
+        " Thank you for making this little universe magical! 💜";
+    }
+  } catch (error) {
+    counter.textContent =
+      "🌙 Our visitor counter is resting. Please visit again soon!";
+    console.error("Castle visitor counter error:", error);
+  }
+})();
+</script>
 </body>
  <!-- Stardust Everdream Castle update -->
 </html>
