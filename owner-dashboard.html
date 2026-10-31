@@ -322,13 +322,21 @@
           "\nAdded: " + (item.created_at || "Date unavailable")
         );
 
-        renderEntries("moodsList", moods, item =>
-          "Mood: " + (item.mood || "Not specified") +
-          "\nNote: " + (item.note || "No note") +
-          "\nSaved: " + (item.created_at || "Date unavailable")
-        );
+      
+renderEntries("moodsList", moods, item =>
+  "Mood: " + (item.mood || "Not specified") +
+  "\nNote: " + (item.note || "No note") +
+  "\nSaved: " + (item.created_at || "Date unavailable")
+);
 
-        showText(
+renderEntries("loveEntriesList", loveEntries, item =>
+  "Category: " + (item.category || "Memory") +
+  "\nTitle: " + (item.title || "Untitled") +
+  "\nContent: " + (item.content || "No details") +
+  "\nSaved: " + (item.created_at || "Date unavailable")
+);
+
+             showText(
           "visitorCount",
           typeof data.visits === "number"
             ? data.visits + " recorded visits"
