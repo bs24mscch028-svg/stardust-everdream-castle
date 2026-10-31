@@ -742,15 +742,36 @@
   const backdrop = document.getElementById("backdrop");
   const content = document.getElementById("modalContent");
   const templates = {
+
   music: `
     <h2 id="modalTitle">🎵 The Melody Planet</h2>
     <p>Some songs say what words cannot.</p>
-    <div class="result">
-      ✨ My favourite song will live here.<br>
-      A song link and personal note can be added later.
+
+    <form id="songForm" class="result">
+      <label for="songTitle">Song title</label>
+      <input id="songTitle" name="songTitle" type="text"
+        placeholder="Enter your favourite song" required>
+
+      <label for="songArtist">Artist</label>
+      <input id="songArtist" name="songArtist" type="text"
+        placeholder="Who sings it?">
+
+      <label for="songLink">Song link</label>
+      <input id="songLink" name="songLink" type="url"
+        placeholder="Paste a YouTube or other music link">
+
+      <label for="songNote">Personal note</label>
+      <textarea id="songNote" name="songNote"
+        placeholder="Why is this song special to you?"></textarea>
+
+      <button class="btn" type="submit">✨ Save my song</button>
+    </form>
+
+    <div id="songResult" class="result" aria-live="polite">
+      🎶 Your favourite song will appear here.
     </div>
   `,
-
+    
   loves: `
     <h2 id="modalTitle">🌷 Things I Love</h2>
     <div class="result">
