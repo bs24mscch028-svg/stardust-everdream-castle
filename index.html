@@ -944,7 +944,65 @@
       closeModal();
     }
   });
+  // Things I Love: open each little world.
+  document.addEventListener("click", event => {
+    const button = event.target.closest("[data-love-category]");
+    if (!button) return;
 
+    const content = document.getElementById("loveCategoryContent");
+    if (!content) return;
+
+    const categories = {
+      flowers: `
+        <h3>🌸 Flowers & Soft Skies</h3>
+        <p>Collect the little things that make your world beautiful.</p>
+        <label for="loveFlower">Favourite flower</label>
+        <input id="loveFlower" type="text" placeholder="e.g. roses, daisies">
+        <label for="loveSky">Favourite sky</label>
+        <select id="loveSky">
+          <option value="">Choose a sky</option>
+          <option>Pink sunset</option>
+          <option>Lavender evening</option>
+          <option>Blue morning</option>
+          <option>Starry night</option>
+        </select>
+        <button class="btn" type="button" data-love-save="flowers">✨ Save my favourites</button>
+        <p id="loveSaveMessage" aria-live="polite"></p>
+      `,
+      films: `
+        <h3>🎬 Songs & Film Memories</h3>
+        <p>Write down a song or film that holds a special memory.</p>
+        <label for="loveFilmTitle">Song or film title</label>
+        <input id="loveFilmTitle" type="text" placeholder="Write the title">
+        <label for="loveFilmNote">Why is it special?</label>
+        <textarea id="loveFilmNote" placeholder="Tell your little story..."></textarea>
+        <button class="btn" type="button" data-love-save="films">✨ Save my memory</button>
+        <p id="loveSaveMessage" aria-live="polite"></p>
+      `,
+      stories: `
+        <h3>📖 Stories & Imagination</h3>
+        <p>Give your imagination a little space to bloom.</p>
+        <label for="loveStoryTitle">Story title</label>
+        <input id="loveStoryTitle" type="text" placeholder="Once upon a time...">
+        <label for="loveStoryNote">Your story or idea</label>
+        <textarea id="loveStoryNote" placeholder="Let your imagination wander..."></textarea>
+        <button class="btn" type="button" data-love-save="stories">✨ Save my story</button>
+        <p id="loveSaveMessage" aria-live="polite"></p>
+      `,
+      moments: `
+        <h3>🌙 Quiet Moments & Unexpected Magic</h3>
+        <p>Sometimes the smallest moments mean the most.</p>
+        <label for="loveMoment">A little moment to remember</label>
+        <textarea id="loveMoment" placeholder="What made you smile today?"></textarea>
+        <button class="btn" type="button" data-love-save="moments">✨ Save my moment</button>
+        <p id="loveSaveMessage" aria-live="polite"></p>
+      `
+    };
+
+    content.innerHTML = categories[button.dataset.loveCategory] ||
+      "<p>Choose a little world to explore.</p>";
+  });
+  
   // Escape key closes the popup.
   document.addEventListener("keydown", event => {
     if (event.key === "Escape" && backdrop.classList.contains("open")) {
