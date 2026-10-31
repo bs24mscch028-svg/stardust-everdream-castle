@@ -329,14 +329,45 @@ renderEntries("moodsList", moods, item =>
   "\nSaved: " + (item.created_at || "Date unavailable")
 );
 
-renderEntries("loveEntriesList", loveEntries, item =>
-  "Category: " + (item.category || "Memory") +
-  "\nTitle: " + (item.title || "Untitled") +
-  "\nContent: " + (item.content || "No details") +
-  "\nSaved: " + (item.created_at || "Date unavailable")
-);
 
-             showText(
+const loveContainer = document.getElementById("loveEntriesList");
+loveContainer.replaceChildren();
+
+if (loveEntries.length === 0) {
+  loveContainer.textContent = "🌷 Your little collection is waiting for its first memory.";
+} else {
+  loveEntries.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "entry love-memory-card";
+
+    const icons = {
+      flowers: "🌸",
+      films: "🎬",
+      stories: "📖",
+      moments: "🌙"
+    };
+
+    const category = document.createElement("p");
+    category.className = "love-category";
+    category.textContent =
+      (icons[item.category] || "💖") + " " +
+      (item.category || "Memory").charAt(0).toUpperCase() +
+      (item.category || "memory").slice(1);
+
+    const title = document.createElement("h3");
+    title.textContent = item.title || "A Little Memory";
+
+    const content = document.createElement("p");
+    content.textContent = item.content || "A moment kept close to the heart.";
+
+    const date = document.createElement("small");
+    date.textContent = "✨ Saved: " + (item.created_at || "Date unavailable");
+
+    card.append(category, title, content, date);
+    loveContainer.appendChild(card);
+  });
+}
+      showText(
           "visitorCount",
           typeof data.visits === "number"
             ? data.visits + " recorded visits"
