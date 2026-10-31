@@ -83,20 +83,21 @@ env.DB.prepare(
 ).all()
       ]);
 
-    return Response.json(
-      {
-        success: true,
-        messages: messagesResult.results || [],
-        songs: songsResult.results || [],
-        moods: moodsResult.results || [],
-        visits: Number(visitsResult?.total || 0)
-      },
-      {
-        headers: {
-          "Cache-Control": "no-store"
-        }
-      }
-    );
+return Response.json(
+  {
+    success: true,
+    messages: messagesResult.results || [],
+    songs: songsResult.results || [],
+    moods: moodsResult.results || [],
+    visits: Number(visitsResult?.total || 0),
+    loveEntries: loveEntriesResult.results || []
+  },
+  {
+    headers: {
+      "Cache-Control": "no-store"
+    }
+  }
+);
   } catch (error) {
     return Response.json(
       {
