@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#211638">
+
+  <title>Royal Chamber | Stardust Everdream Castle</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Georgia, "Times New Roman", serif;
+      color: #fff7ff;
+      background:
+        radial-gradient(ellipse at top, #49305f 0%, transparent 55%),
+        linear-gradient(145deg, #171126, #211638 55%, #352046);
+    }
+
+    header {
+      padding: 30px 18px;
+      text-align: center;
+      border-bottom: 1px solid #ffffff20;
+    }
+
+    header h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 5vw, 42px);
+    }
+
+    header p {
+      color: #e3cdea;
+      margin: 0;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      max-width: 1100px;
+      margin: 20px auto;
+      padding: 0 18px;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: 0;
+      border-radius: 12px;
+      padding: 11px 16px;
+      color: #29183a;
+      background: #f1c9ed;
+    }
+
+    button:hover {
+      background: #ffe5fa;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 18px 40px;
+    }
+
+    #pageStatus {
+      margin: 18px 0;
+      padding: 14px;
+      border-radius: 12px;
+      background: #ffffff0d;
+      color: #f1dff5;
+      overflow-wrap: anywhere;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 22px;
+      border: 1px solid #ffffff20;
+      border-radius: 20px;
+      background: #ffffff0b;
+      box-shadow: 0 10px 30px #00000018;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 21px;
+      color: #f6d7f4;
+    }
+
+    .count {
+      font-size: 13px;
+      color: #d7b9e4;
+      margin-bottom: 14px;
+    }
+
+    .entry {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 12px;
+      background: #ffffff0b;
+      border: 1px solid #ffffff12;
+      line-height: 1.5;
+    }
+
+    .empty {
+      color: #cbbbd4;
+      font-style: italic;
+    }
+
+    .small {
+      color: #cbbbd4;
+      font-size: 13px;
+    }
+
+    a {
+      color: #ffd5fa;
+      overflow-wrap: anywhere;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #cbbbd4;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>🏰 Your Royal Chamber</h1>
+    <p>A private corner of your Stardust Everdream Castle ✨</p>
+  </header>
+
+  <div class="topbar">
+    <span>🌙 Welcome back, Castle Keeper</span>
+    <button id="logoutButton" type="button">Log out</button>
+  </div>
+
+  <main>
+    <p id="pageStatus" role="status" aria-live="polite">
+      ✨ Checking your owner session...
+    </p>
+
+    <div class="grid">
+      <section class="card">
+        <h2>💌 Mystery Mail</h2>
+        <div class="count" id="messageCount">Messages</div>
+        <div id="messagesList" class="empty">Waiting for secure access...</div>
+      </section>
+
+      <section class="card">
+        <h2>🌷 Flower Garden</h2>
+        <div class="count" id="flowerCount">Flower dedications</div>
+        <div id="flowersList" class="empty">Waiting for secure access...</div>
+      </section>
+
+      <section class="card">
+        <h2>🎶 Melody Planet</h2>
+        <div class="count" id="songCount">Song dedications</div>
+        <div id="songsList" class="empty">Waiting for secure access...</div>
+      </section>
+
+      <section class="card">
+        <h2>🌙 Moonlit Memories</h2>
+        <div class="count" id="moodCount">Saved moods</div>
+        <div id="moodsList" class="empty">Waiting for secure access...</div>
+      </section>
+
+      <section class="card">
+        <h2>💖 Things I Love</h2>
+        <div id="favouriteSong" class="empty">
+          Your browser-saved favourite song will appear here if available.
+        </div>
+        <p class="small">
+          This section currently reads the favourite song saved in this browser.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>🏰 Castle Visitors</h2>
+        <div class="count">Recorded visits</div>
+        <div id="visitorCount" class="empty">Waiting for secure access...</div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    Made with a little stardust and a lot of heart ✨
+  </footer>
+
+  <script>
+    const statusBox = document.getElementById("pageStatus");
+
+    function showText(elementId, text) {
+      document.getElementById(elementId).textContent = text;
+    }
+
+    function renderEntries(elementId, entries, formatter) {
+      const container = document.getElementById(elementId);
+      container.replaceChildren();
+
+      if (!Array.isArray(entries) || entries.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "empty";
+        empty.textContent = "Nothing here yet.";
+        container.appendChild(empty);
+        return;
+      }
+
+      for (const entry of entries) {
+        const item = document.createElement("div");
+        item.className = "entry";
+        item.textContent = formatter(entry);
+        container.appendChild(item);
+      }
+    }
+
+    async function loadDashboard() {
+      try {
+        const sessionResponse = await fetch("/api/auth/me", {
+          credentials: "same-origin",
+          cache: "no-store"
+        });
+
+        if (!sessionResponse.ok) {
+          window.location.replace("/owner-login.html");
+          return;
+        }
+
+        const session = await sessionResponse.json();
+
+        if (!session.authenticated) {
+          window.location.replace("/owner-login.html");
+          return;
+        }
+
+        statusBox.textContent =
+          "✨ Owner session verified. Loading your private chamber...";
+
+        const response = await fetch("/api/owner-data", {
+          credentials: "same-origin",
+          cache: "no-store"
+        });
+
+        if (response.status === 401 || response.status === 403) {
+          window.location.replace("/owner-login.html");
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            "Your session is active, but the secure data endpoint is not ready yet."
+          );
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+          throw new Error(data.message || "Unable to load dashboard data.");
+        }
+
+        const messages = Array.isArray(data.messages) ? data.messages : [];
+        const flowers = messages.filter(
+          item => item.message_type === "flower"
+        );
+        const anonymous = messages.filter(
+          item => item.message_type === "anonymous"
+        );
+        const songs = Array.isArray(data.songs) ? data.songs : [];
+        const moods = Array.isArray(data.moods) ? data.moods : [];
+
+        showText("messageCount", anonymous.length + " anonymous messages");
+        showText("flowerCount", flowers.length + " flower dedications");
+        showText("songCount", songs.length + " song dedications");
+        showText("moodCount", moods.length + " saved moods");
+
+        renderEntries("messagesList", anonymous, item =>
+          item.message + "\nReceived: " + (item.created_at || "Date unavailable")
+        );
+
+        renderEntries("flowersList", flowers, item =>
+          item.message + "\nReceived: " + (item.created_at || "Date unavailable")
+        );
+
+        renderEntries("songsList", songs, item =>
+          "Title: " + (item.title || "Untitled") +
+          "\nArtist: " + (item.artist || "Not provided") +
+          "\nLink: " + (item.song_url || "Not provided") +
+          "\nNote: " + (item.note || "No note") +
+          "\nAdded: " + (item.created_at || "Date unavailable")
+        );
+
+        renderEntries("moodsList", moods, item =>
+          "Mood: " + (item.mood || "Not specified") +
+          "\nNote: " + (item.note || "No note") +
+          "\nSaved: " + (item.created_at || "Date unavailable")
+        );
+
+        showText(
+          "visitorCount",
+          typeof data.visits === "number"
+            ? data.visits + " recorded visits"
+            : "Visitor count is not available yet."
+        );
+
+        try {
+          const saved = localStorage.getItem("everdreamFavouriteSong");
+
+          if (saved) {
+            const song = JSON.parse(saved);
+            const parts = [
+              "Title: " + (song.title || "Untitled"),
+              "Artist: " + (song.artist || "Not provided"),
+              "Note: " + (song.note || "No note"),
+              "Link: " + (song.link || "Not provided")
+            ];
+
+            showText("favouriteSong", parts.join("\n"));
+          }
+        } catch (error) {
+          showText(
+            "favouriteSong",
+            "The browser-saved favourite song could not be read."
+          );
+        }
+
+        statusBox.textContent =
+          "✨ Your chamber is open. Your private submissions are shown below.";
+      } catch (error) {
+        statusBox.textContent =
+          "⚠️ " + (error.message || "Could not load your dashboard.");
+      }
+    }
+
+    document.getElementById("logoutButton").addEventListener("click", async () => {
+      const button = document.getElementById("logoutButton");
+      button.disabled = true;
+
+      try {
+        await fetch("/api/auth/logout", {
+          method: "POST",
+          credentials: "same-origin",
+          cache: "no-store"
+        });
+      } finally {
+        window.location.replace("/owner-login.html");
+      }
+    });
+
+    loadDashboard();
+  </script>
+</body>
+</html>
