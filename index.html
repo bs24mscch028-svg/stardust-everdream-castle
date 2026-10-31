@@ -665,245 +665,336 @@
     </section>
   </div>
 
-  <script>
-    const backdrop = document.getElementById("backdrop");
-    const content = document.getElementById("modalContent");
+ <script>
+  const backdrop = document.getElementById("backdrop");
+  const content = document.getElementById("modalContent");
 
-    const templates = {
-      music: `
-        <h2 id="modalTitle">🎵 The Melody Planet</h2>
-        <p>Some songs say what words cannot.</p>
-        <div class="result">
-          ✨ My favourite song will live here.<br>
-          A song link and personal note can be added later.
-        </div>
-      `,
+  const templates = {
+    music: `
+      <h2 id="modalTitle">🎵 The Melody Planet</h2>
+      <p>Some songs say what words cannot.</p>
+      <div class="result">
+        ✨ My favourite song will live here.<br>
+        A song link and personal note can be added later.
+      </div>
+    `,
 
-      loves: `
-        <h2 id="modalTitle">🌷 Things I Love</h2>
-        <div class="result">
-          🌸 Flowers and soft skies<br>
-          🎧 Songs that feel like memories<br>
-          📚 Stories and imagination<br>
-          🌙 Quiet moments and unexpected magic
-        </div>
-      `,
+    loves: `
+      <h2 id="modalTitle">🌷 Things I Love</h2>
+      <div class="result">
+        🌸 Flowers and soft skies<br>
+        🎧 Songs that feel like memories<br>
+        📚 Stories and imagination<br>
+        🌙 Quiet moments and unexpected magic
+      </div>
+    `,
 
-      mood: `
-        <h2 id="modalTitle">🌙 The Moonlit Room</h2>
-        <p>Choose the colour of your inner sky.</p>
-        <div class="actions">
-          <button class="btn mood" data-mood="Happy">☀️ Happy</button>
-          <button class="btn mood" data-mood="Peaceful">🌿 Peaceful</button>
-          <button class="btn mood" data-mood="Dreamy">✨ Dreamy</button>
-          <button class="btn mood" data-mood="Thoughtful">🌙 Thoughtful</button>
-          <button class="btn mood" data-mood="Motivated">🔥 Motivated</button>
-        </div>
-        <div class="result" id="moodResult">Choose a mood to reveal a message.</div>
-      `,
+    mood: `
+      <h2 id="modalTitle">🌙 The Moonlit Room</h2>
+      <p>Choose the colour of your inner sky.</p>
+      <div class="actions">
+        <button class="btn mood" data-mood="Happy">☀️ Happy</button>
+        <button class="btn mood" data-mood="Peaceful">🌿 Peaceful</button>
+        <button class="btn mood" data-mood="Dreamy">✨ Dreamy</button>
+        <button class="btn mood" data-mood="Thoughtful">🌙 Thoughtful</button>
+        <button class="btn mood" data-mood="Motivated">🔥 Motivated</button>
+      </div>
+      <div class="result" id="moodResult">
+        Choose a mood to reveal a message.
+      </div>
+    `,
 
-      mystery: `
-        <h2 id="modalTitle">🔮 The Mystery Planet</h2>
-        <p>Choose one little way to leave some magic.</p>
-        <div class="actions">
-          <button class="btn" data-kind="song">🎵 Song</button>
-          <button class="btn" data-kind="flower">🌸 Flower</button>
-          <button class="btn" data-kind="message">💌 Anonymous message</button>
-        </div>
-        <div id="mysteryForm" class="result">
-          Your submissions will be saved privately after the secure backend
-          is connected. This preview does not send or save messages.
-        </div>
-      `,
+    mystery: `
+      <h2 id="modalTitle">🔮 The Mystery Planet</h2>
+      <p>Choose one little way to leave some magic.</p>
 
-      garden: `
-        <h2 id="modalTitle">🦋 The Stardust Garden</h2>
-        <p>Every visitor will help the castle grow.</p>
-        <div class="result">
-          🌱 100 visits — The garden awakens<br>
-          🌷 250 visits — Flowers begin to bloom<br>
-          ✨ 500 visits — The castle shines brighter<br>
-          🌌 1,000 visits — The celestial garden appears
-        </div>
-        <p>These are planned milestones, not a live visitor count yet.</p>
-      `,
+      <div class="actions">
+        <button class="btn" data-kind="song">🎵 Song</button>
+        <button class="btn" data-kind="flower">🌸 Flower</button>
+        <button class="btn" data-kind="message">💌 Anonymous message</button>
+      </div>
 
-      royal: `
-        <h2 id="modalTitle">👑 The Royal Chamber</h2>
-        <p>Your private creator dashboard is planned for the next stage.</p>
-        <div class="result">
-          ✧ Edit music, moods, favourites, and quotes<br>
-          ✧ Read visitor messages privately<br>
-          ✧ View visit totals and milestones
-        </div>
-        <p>
-          Login and private storage are not active yet.
-          We will connect secure authentication before storing real messages.
-        </p>
-      `
-    };
+      <div id="mysteryForm" class="result">
+        Choose a dedication or leave a little message.
+      </div>
+    `,
 
-   function openModal(name) {
-  if (!templates[name]) {
-    console.error("Unknown castle room:", name);
-    return;
-  }
+    garden: `
+      <h2 id="modalTitle">🦋 The Stardust Garden</h2>
+      <p>Every visitor will help the castle grow.</p>
+      <div class="result">
+        🌱 100 visits — The garden awakens<br>
+        🌷 250 visits — Flowers begin to bloom<br>
+        ✨ 500 visits — The castle shines brighter<br>
+        🌌 1,000 visits — The celestial garden appears
+      </div>
+      <p>
+        These are planned milestones, not a live visitor count yet.
+      </p>
+    `,
 
-  content.innerHTML = templates[name];
+    royal: `
+      <h2 id="modalTitle">👑 The Royal Chamber</h2>
+      <p>Your private creator dashboard is planned for the next stage.</p>
+      <div class="result">
+        ✧ Edit music, moods, favourites, and quotes<br>
+        ✧ Read visitor messages privately<br>
+        ✧ View visit totals and milestones
+      </div>
+      <p>
+        Login and private storage are not active yet.
+        Secure authentication will be required before private submissions
+        can be viewed.
+      </p>
+    `
+  };
 
-  // Open the room popup.
-  backdrop.classList.add("open");
-  backdrop.setAttribute("aria-hidden", "false");
-
-  // Keep the page behind the popup from scrolling.
-  document.body.style.overflow = "hidden";
-
-  // Start the popup at its beginning.
-  content.scrollTop = 0;
-  backdrop.scrollTop = 0;
-
-  // Put keyboard focus inside the popup.
-  const firstButton = content.querySelector("button");
-  if (firstButton) {
-    firstButton.focus({ preventScroll: true });
-  }
-} 
-
-    function closeModal() {
-      backdrop.classList.remove("open");
-      document.body.style.overflow = "";
+  // Open a castle room.
+  function openModal(name) {
+    if (!templates[name]) {
+      console.error("Unknown castle room:", name);
+      return;
     }
 
-    document.querySelectorAll("[data-open]").forEach(button => {
-      button.addEventListener("click", () => openModal(button.dataset.open));
+    content.innerHTML = templates[name];
+
+    backdrop.classList.add("open");
+    backdrop.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+
+    const modal = backdrop.querySelector(".modal");
+    if (modal) modal.scrollTop = 0;
+
+    const firstButton = content.querySelector("button");
+    if (firstButton) {
+      firstButton.focus({ preventScroll: true });
+    }
+  }
+
+  // Close a castle room.
+  function closeModal() {
+    backdrop.classList.remove("open");
+    backdrop.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  // Open the selected room.
+  document.querySelectorAll("[data-open]").forEach(button => {
+    button.addEventListener("click", () => {
+      openModal(button.dataset.open);
     });
+  });
 
-    document.getElementById("exploreButton").addEventListener("click", () => {
-      document.getElementById("rooms").scrollIntoView({ behavior: "smooth" });
+  // Explore the rooms.
+  document.getElementById("exploreButton").addEventListener("click", () => {
+    document.getElementById("rooms").scrollIntoView({
+      behavior: "smooth"
     });
+  });
 
-    document.getElementById("visitButton").addEventListener("click", () => {
-      document.getElementById("visitors").scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
+  // Visit the counter section.
+  document.getElementById("visitButton").addEventListener("click", () => {
+    document.getElementById("visitors").scrollIntoView({
+      behavior: "smooth",
+      block: "center"
     });
+  });
 
-    document.getElementById("closeModal").addEventListener("click", closeModal);
+  // Close button.
+  document.getElementById("closeModal").addEventListener("click", closeModal);
 
-    backdrop.addEventListener("click", event => {
-      if (event.target === backdrop) closeModal();
+  // Close when the dark background itself is clicked.
+  backdrop.addEventListener("click", event => {
+    if (event.target === backdrop) {
+      closeModal();
+    }
+  });
 
-      const moodButton = event.target.closest("[data-mood]");
+  // Keyboard support.
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+      closeModal();
+    }
+  });
 
-      if (moodButton) {
-        const messages = {
-          Happy: "A little sunshine is finding its way through the clouds. ☀️",
-          Peaceful: "Let the world be quiet for a moment. 🌿",
-          Dreamy: "Somewhere between a wish and a star, an idea is blooming. ✨",
-          Thoughtful: "Even the moon has a faraway side. Take your time. 🌙",
-          Motivated: "One small brave step can change the whole horizon. 🔥"
-        };
+  // Handle the dynamically created buttons inside the popup.
+  // Event delegation allows these buttons to work after a room opens.
+  backdrop.addEventListener("click", event => {
+    const moodButton = event.target.closest("[data-mood]");
 
-        document.getElementById("moodResult").textContent =
-          messages[moodButton.dataset.mood];
+    if (moodButton) {
+      const messages = {
+        Happy: "A little sunshine is finding its way through the clouds. ☀️",
+        Peaceful: "Let the world be quiet for a moment. 🌿",
+        Dreamy: "Somewhere between a wish and a star, an idea is blooming. ✨",
+        Thoughtful: "Even the moon has a faraway side. Take your time. 🌙",
+        Motivated: "One small brave step can change the whole horizon. 🔥"
+      };
+
+      const moodResult = document.getElementById("moodResult");
+
+      if (moodResult) {
+        moodResult.textContent = messages[moodButton.dataset.mood];
       }
 
-      const kindButton = event.target.closest("[data-kind]");
+      return;
+    }
 
-      if (kindButton) {
-        const kind = kindButton.dataset.kind;
-        const form = document.getElementById("mysteryForm");
+    const kindButton = event.target.closest("[data-kind]");
 
-if (kind === "song") {
-  form.innerHTML = `
-    <strong>🎵 Dedicate a song</strong>
-    <p>This form is a preview and will not send anything yet.</p>
+    if (!kindButton) return;
 
-    <form id="songForm">
-      <label class="field">Song title
-        <input name="songTitle" placeholder="Enter the song title" required>
-      </label>
+    const kind = kindButton.dataset.kind;
+    const formContainer = document.getElementById("mysteryForm");
 
-      <label class="field">Artist (optional)
-        <input name="artist" placeholder="Enter the artist">
-      </label>
+    if (!formContainer) return;
 
-      <label class="field">A little note (optional)
-        <textarea name="note" placeholder="Why did you choose this song?"></textarea>
-      </label>
+    if (kind === "song") {
+      formContainer.innerHTML = `
+        <strong>🎵 Dedicate a song</strong>
+        <p>Share a song that means something to you.</p>
 
-      <button class="btn primary" type="submit">
-        Send My Song Dedication 🎵
-      </button>
+        <form id="songForm">
+          <label class="field">
+            Song title
+            <input
+              name="songTitle"
+              placeholder="Enter the song title"
+              maxlength="200"
+              required
+            >
+          </label>
 
-      <p id="songStatus" role="status"></p>
-    </form>
-  `;
-}
-        
-if (kind === "flower") {
-  form.innerHTML = `
-    <strong>🌸 Dedicate a flower</strong>
-    <p>Send a flower with a little message from your heart.</p>
+          <label class="field">
+            Artist (optional)
+            <input
+              name="artist"
+              placeholder="Enter the artist"
+              maxlength="200"
+            >
+          </label>
 
-    <form id="flowerForm">
-      <label class="field">Choose a flower
-        <select name="flower" required>
-          <option value="">Choose your flower</option>
-          <option value="Rose 🌹">Rose 🌹</option>
-          <option value="Sunflower 🌻">Sunflower 🌻</option>
-          <option value="Tulip 🌷">Tulip 🌷</option>
-          <option value="Daisy 🌼">Daisy 🌼</option>
-          <option value="Lavender 💜">Lavender 💜</option>
-          <option value="Cherry blossom 🌸">Cherry blossom 🌸</option>
-          <option value="Lotus 🪷">Lotus 🪷</option>
-        </select>
-      </label>
+          <label class="field">
+            A little note (optional)
+            <textarea
+              name="note"
+              placeholder="Why did you choose this song?"
+              maxlength="2000"
+            ></textarea>
+          </label>
 
-      <label class="field">Your note (optional)
-        <textarea name="note" placeholder="Why did you choose this flower?"></textarea>
-      </label>
+          <button class="btn primary" type="submit">
+            Send My Song Dedication 🎵
+          </button>
 
-      <button class="btn primary" type="submit">
-        Send My Flower Dedication 🌸
-      </button>
+          <p id="songStatus" role="status" aria-live="polite">
+            Sending is not connected yet.
+          </p>
+        </form>
+      `;
+    }
 
-      <p id="flowerStatus" role="status"></p>
-    </form>
-  `;
-}
+    if (kind === "flower") {
+      formContainer.innerHTML = `
+        <strong>🌸 Dedicate a flower</strong>
+        <p>Send a flower with a little message from your heart.</p>
 
-  if (kind === "message") {
-  form.innerHTML = `
-    <strong>💌 A Little Message for the Castle Keeper</strong>
-    <p>Leave a little kindness, a thought, or a secret.</p>
+        <form id="flowerForm">
+          <label class="field">
+            Choose a flower
+            <select name="flower" required>
+              <option value="">Choose your flower</option>
+              <option value="Rose 🌹">Rose 🌹</option>
+              <option value="Sunflower 🌻">Sunflower 🌻</option>
+              <option value="Tulip 🌷">Tulip 🌷</option>
+              <option value="Daisy 🌼">Daisy 🌼</option>
+              <option value="Lavender 💜">Lavender 💜</option>
+              <option value="Cherry blossom 🌸">Cherry blossom 🌸</option>
+              <option value="Lotus 🪷">Lotus 🪷</option>
+            </select>
+          </label>
 
-    <form id="messageForm">
-      <label class="field">Your message
-        <textarea
-          name="message"
-          id="visitorMessage"
-          placeholder="Write your message here..."
-          required
-          maxlength="2000"
-        ></textarea>
-      </label>
+          <label class="field">
+            Your note (optional)
+            <textarea
+              name="note"
+              placeholder="Why did you choose this flower?"
+              maxlength="2000"
+            ></textarea>
+          </label>
 
-      <button class="btn primary" type="submit">
-        Send My Message 💌
-      </button>
+          <button class="btn primary" type="submit">
+            Send My Flower Dedication 🌸
+          </button>
 
-      <p id="messageStatus" role="status"></p>
-    </form>
-  `;
-}
-  }
-    });
+          <p id="flowerStatus" role="status" aria-live="polite">
+            Sending is not connected yet.
+          </p>
+        </form>
+      `;
+    }
 
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") closeModal();
-    });
-  </script>
+    if (kind === "message") {
+      formContainer.innerHTML = `
+        <strong>💌 A Little Message for the Castle Keeper</strong>
+        <p>Leave a little kindness, a thought, or a secret.</p>
+
+        <form id="messageForm">
+          <label class="field">
+            Your message
+            <textarea
+              name="message"
+              id="visitorMessage"
+              placeholder="Write your message here..."
+              required
+              maxlength="2000"
+            ></textarea>
+          </label>
+
+          <button class="btn primary" type="submit">
+            Send My Message 💌
+          </button>
+
+          <p id="messageStatus" role="status" aria-live="polite">
+            Sending is not connected yet.
+          </p>
+        </form>
+      `;
+    }
+  });
+
+  // Prevent the forms from reloading the page or pretending to send.
+  // Real submission handling will be added with the backend.
+  backdrop.addEventListener("submit", event => {
+    const form = event.target;
+
+    if (
+      form.id !== "songForm" &&
+      form.id !== "flowerForm" &&
+      form.id !== "messageForm"
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+
+    let statusId;
+
+    if (form.id === "songForm") {
+      statusId = "songStatus";
+    } else if (form.id === "flowerForm") {
+      statusId = "flowerStatus";
+    } else {
+      statusId = "messageStatus";
+    }
+
+    const status = document.getElementById(statusId);
+
+    if (status) {
+      status.textContent =
+        "Your form is ready, but sending is not connected yet. Nothing has been sent or saved.";
+    }
+  });
+</script> 
 </body>
 </html>
