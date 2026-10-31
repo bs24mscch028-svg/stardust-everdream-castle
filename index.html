@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#211638">
+
+  <title>Stardust Everdream Castle</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      background: #fbf5ff;
+      color: #392448;
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+      padding: 28px 20px 65px;
+      text-align: center;
+      color: white;
+      background:
+        radial-gradient(ellipse at 50% 85%, #b995e6 0%, transparent 48%),
+        radial-gradient(ellipse at 15% 30%, #704e9e 0%, transparent 42%),
+        linear-gradient(145deg, #130c27, #34204f 55%, #211638);
+    }
+
+    .stars {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, white 1px, transparent 2px),
+        radial-gradient(circle, #f9d6ff 1px, transparent 2px);
+      background-size: 73px 83px, 113px 127px;
+      background-position: 0 0, 40px 30px;
+      opacity: .65;
+    }
+
+    .topbar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .brand {
+      font-size: 17px;
+      letter-spacing: 1px;
+    }
+
+    .pill {
+      padding: 10px 15px;
+      border: 1px solid #ffffff66;
+      border-radius: 30px;
+      color: white;
+      background: #ffffff12;
+    }
+
+    .intro {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 70px auto 0;
+    }
+
+    .eyebrow {
+      color: #f4d7ff;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 20px 0;
+      font-size: clamp(39px, 7vw, 76px);
+      font-weight: normal;
+      line-height: 1.1;
+      text-shadow: 0 0 35px #d7a7ff66;
+    }
+
+    .intro p {
+      max-width: 580px;
+      margin: 0 auto;
+      color: #eee0ff;
+      font-family: Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin: 27px 0;
+    }
+
+    .btn {
+      padding: 13px 20px;
+      border: 1px solid #ffffff66;
+      border-radius: 30px;
+      color: white;
+      background: #ffffff13;
+    }
+
+    .btn.primary {
+      border-color: transparent;
+      color: #392448;
+      background: #f3cce8;
+    }
+
+    .castle {
+      position: relative;
+      max-width: 650px;
+      margin: 35px auto 0;
+      animation: float 5s ease-in-out infinite;
+      filter: drop-shadow(0 0 30px #d5b0ff55);
+    }
+
+    .castle svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .moon {
+      position: absolute;
+      top: 0;
+      right: 12%;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: #fff0c9;
+      box-shadow: 0 0 35px #fff0c9, 0 0 85px #d4aaff66;
+    }
+
+    .moon::after {
+      position: absolute;
+      top: -7px;
+      left: -15px;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: #35214f;
+      content: "";
+    }
+
+    .castle-caption {
+      position: relative;
+      margin-top: -5px;
+      color: #f8dff8;
+      font-style: italic;
+      font-size: 14px;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-9px); }
+    }
+
+    .quote {
+      padding: 48px 20px;
+      text-align: center;
+      color: #543763;
+      background: linear-gradient(100deg, #ead7fa, #fae1ef);
+    }
+
+    .quote p {
+      max-width: 750px;
+      margin: auto;
+      font-size: clamp(22px, 4vw, 32px);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 65px 22px;
+    }
+
+    .section-heading {
+      margin-bottom: 35px;
+      text-align: center;
+    }
+
+    .section-heading h2 {
+      margin: 15px 0;
+      font-size: 38px;
+      font-weight: normal;
+    }
+
+    .section-heading p {
+      color: #806d8c;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .rooms {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 17px;
+    }
+
+    .room {
+      min-height: 195px;
+      padding: 25px;
+      border: 1px solid #e8d8f1;
+      border-radius: 23px;
+      text-align: left;
+      color: #392448;
+      background: linear-gradient(145deg, #fffaff, #f2e6fb);
+      box-shadow: 0 12px 35px #4024520c;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .room:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 35px #40245220;
+    }
+
+    .icon {
+      display: block;
+      margin-bottom: 15px;
+      font-size: 32px;
+    }
+
+    .room h3 {
+      margin: 0 0 10px;
+      font-size: 23px;
+      font-weight: normal;
+    }
+
+    .room p {
+      margin: 0;
+      color: #806d8c;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .counter {
+      margin-top: 35px;
+      padding: 35px 20px;
+      border: 1px solid #e3d0ef;
+      border-radius: 25px;
+      text-align: center;
+      background: linear-gradient(130deg, #f4e7ff, #fff2fa);
+    }
+
+    .counter h2 {
+      margin: 12px 0;
+      color: #77519a;
+      font-size: 42px;
+      font-weight: normal;
+    }
+
+    .counter p {
+      color: #806d8c;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    footer {
+      padding: 28px 20px;
+      text-align: center;
+      color: #897796;
+      font-size: 13px;
+    }
+
+    .backdrop {
+      position: fixed;
+      z-index: 10;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: #160d25c9;
+    }
+
+    .backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      position: relative;
+      width: min(100%, 520px);
+      max-height: 85vh;
+      overflow: auto;
+      padding: 28px;
+      border: 1px solid #e8d8f1;
+      border-radius: 24px;
+      color: #392448;
+      background: #fffaff;
+    }
+
+    .modal h2 {
+      font-size: 29px;
+      font-weight: normal;
+    }
+
+    .modal p {
+      color: #806d8c;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .close {
+      position: absolute;
+      top: 12px;
+      right: 15px;
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 50%;
+      background: #f0e4f7;
+      font-size: 23px;
+    }
+
+    .field {
+      display: block;
+      margin: 16px 0;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      display: block;
+      width: 100%;
+      margin-top: 8px;
+      padding: 12px;
+      border: 1px solid #dfcde9;
+      border-radius: 12px;
+      color: #392448;
+      background: white;
+    }
+
+    .field textarea {
+      min-height: 100px;
+    }
+
+    .result {
+      margin-top: 15px;
+      padding: 16px;
+      border-radius: 15px;
+      background: #f4eafa;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 760px) {
+      .rooms {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .intro {
+        margin-top: 50px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .rooms {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .brand {
+        max-width: 190px;
+        font-size: 14px;
+      }
+
+      .castle {
+        margin-top: 55px;
+      }
+
+      .moon {
+        width: 53px;
+        height: 53px;
+      }
+
+      .moon::after {
+        width: 50px;
+        height: 50px;
+      }
+
+      main {
+        padding: 45px 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="hero" id="home">
+    <div class="stars"></div>
+
+    <nav class="topbar">
+      <div class="brand">✧ Stardust Everdream Castle</div>
+      <button class="pill" id="visitButton">✦ My universe</button>
+    </nav>
+
+    <section class="intro">
+      <div class="eyebrow">A little world beyond the moon</div>
+
+      <h1>Stardust Everdream<br>Castle</h1>
+
+      <p>
+        Where dreams take root, flowers become stardust,
+        and a little universe comes alive. Welcome to my
+        castle of memories, melodies, secret gardens, and
+        tiny wonders waiting to be discovered.
+      </p>
+
+      <div class="actions">
+        <button class="btn primary" id="exploreButton">
+          Enter my castle ✨
+        </button>
+
+        <button class="btn" data-open="mystery">
+          Find a little secret ↗
+        </button>
+      </div>
+
+      <div class="castle">
+        <div class="moon"></div>
+
+        <svg viewBox="0 0 600 340" role="img"
+             aria-label="A magical lavender castle beneath the moon">
+          <defs>
+            <linearGradient id="stone" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#f8e7ff"/>
+              <stop offset="55%" stop-color="#bda0e2"/>
+              <stop offset="100%" stop-color="#74549e"/>
+            </linearGradient>
+
+            <linearGradient id="roof" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffd9f0"/>
+              <stop offset="100%" stop-color="#966dbb"/>
+            </linearGradient>
+
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <ellipse cx="300" cy="310" rx="250" ry="20"
+                   fill="#e5c3ff" opacity=".25"/>
+
+          <path d="M50 300 Q120 260 180 285 T300 280
+                   T430 282 T550 300 L570 320 L30 320Z"
+                fill="#62477f"/>
+
+          <g fill="url(#stone)" stroke="#f9e5ff" stroke-width="2">
+            <rect x="120" y="155" width="80" height="145"/>
+            <rect x="210" y="115" width="180" height="185"/>
+            <rect x="400" y="155" width="80" height="145"/>
+            <rect x="80" y="195" width="40" height="105"/>
+            <rect x="480" y="195" width="40" height="105"/>
+          </g>
+
+          <g fill="url(#roof)" stroke="#f9e5ff" stroke-width="2">
+            <path d="M105 155 L160 60 L215 155Z"/>
+            <path d="M185 115 L250 15 L315 115Z"/>
+            <path d="M285 115 L350 15 L415 115Z"/>
+            <path d="M385 155 L440 60 L495 155Z"/>
+            <path d="M65 195 L100 130 L135 195Z"/>
+            <path d="M465 195 L500 130 L535 195Z"/>
+          </g>
+
+          <g fill="#fff0b7" filter="url(#glow)">
+            <path d="M145 190 Q160 170 175 190 V215 H145Z"/>
+            <path d="M230 145 Q245 125 260 145 V170 H230Z"/>
+            <path d="M280 145 Q295 125 310 145 V170 H280Z"/>
+            <path d="M330 145 Q345 125 360 145 V170 H330Z"/>
+            <path d="M420 190 Q440 170 460 190 V215 H420Z"/>
+            <path d="M88 220 Q100 205 112 220 V240 H88Z"/>
+            <path d="M488 220 Q500 205 512 220 V240 H488Z"/>
+          </g>
+
+          <path d="M260 300 V245 Q300 190 340 245 V300Z"
+                fill="#35214f" stroke="#f8dfff" stroke-width="3"/>
+
+          <path d="M276 300 V250 Q300 220 324 250 V300Z"
+                fill="#ffe4a7" opacity=".8"/>
+
+          <g fill="#f8dcff">
+            <circle cx="160" cy="58" r="4"/>
+            <circle cx="250" cy="14" r="4"/>
+            <circle cx="350" cy="14" r="4"/>
+            <circle cx="440" cy="58" r="4"/>
+            <path d="M250 0 L256 12 L269 17 L256 22 L250 35
+                     L244 22 L231 17 L244 12Z"/>
+            <path d="M440 35 L444 43 L452 46 L444 49
+                     L440 57 L436 49 L428 46 L436 43Z"/>
+          </g>
+
+          <g fill="#e9bce6">
+            <circle cx="70" cy="286" r="10"/>
+            <circle cx="87" cy="275" r="12"/>
+            <circle cx="100" cy="291" r="9"/>
+            <circle cx="500" cy="286" r="10"/>
+            <circle cx="517" cy="275" r="12"/>
+            <circle cx="530" cy="291" r="9"/>
+          </g>
+
+          <g fill="#bde4c5">
+            <path d="M85 302 Q60 275 68 260 Q91 270 85 302Z"/>
+            <path d="M95 303 Q105 273 120 274 Q120 296 95 303Z"/>
+            <path d="M505 302 Q480 275 488 260 Q511 270 505 302Z"/>
+            <path d="M515 303 Q525 273 540 274 Q540 296 515 303Z"/>
+          </g>
+        </svg>
+
+        <div class="castle-caption">
+          A little castle, a thousand dreams, and a universe of me.
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <section class="quote">
+    <p>
+      “Every star has a story. Every planet holds a little piece of me.”
+    </p>
+  </section>
+
+  <main id="rooms">
+    <section class="section-heading">
+      <div class="eyebrow">Choose a path, little wanderer</div>
+      <h2>Explore My Everdream</h2>
+      <p>
+        Each little place holds a different piece of my world.
+        Wander wherever your curiosity takes you.
+      </p>
+    </section>
+
+    <section class="rooms">
+      <button class="room" data-open="music">
+        <span class="icon">🎵</span>
+        <h3>The Melody Planet</h3>
+        <p>A song for this moment and the feelings tucked inside it.</p>
+      </button>
+
+      <button class="room" data-open="loves">
+        <span class="icon">🌷</span>
+        <h3>Things I Love</h3>
+        <p>Favourite colours, flowers, stories, music, and little comforts.</p>
+      </button>
+
+      <button class="room" data-open="mood">
+        <span class="icon">🌙</span>
+        <h3>The Moonlit Room</h3>
+        <p>A glimpse of the mood colouring my sky today.</p>
+      </button>
+
+      <button class="room" data-open="mystery">
+        <span class="icon">🔮</span>
+        <h3>The Mystery Planet</h3>
+        <p>Hidden surprises and little ways to leave a message.</p>
+      </button>
+
+      <button class="room" data-open="garden">
+        <span class="icon">🦋</span>
+        <h3>The Stardust Garden</h3>
+        <p>A magical garden that will grow with real visitor milestones.</p>
+      </button>
+
+      <button class="room" data-open="royal">
+        <span class="icon">👑</span>
+        <h3>The Royal Chamber</h3>
+        <p>Your future private space for managing your universe.</p>
+      </button>
+    </section>
+
+    <section class="counter" id="visitors">
+      <div class="eyebrow">Little traces left in my universe</div>
+      <h2>✨ Stardust Awaits ✨</h2>
+      <p id="counterText">
+        Your real visitor count will appear after database setup.
+      </p>
+      <p>
+        The garden will have milestones at 100, 250, 500, 1,000 visits,
+        and beyond.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    Made of moonlight, little memories, and stardust.
+    ✧ Stardust Everdream Castle ✧
+  </footer>
+
+  <div class="backdrop" id="backdrop">
+    <section class="modal" role="dialog" aria-modal="true"
+             aria-labelledby="modalTitle">
+      <button class="close" id="closeModal" aria-label="Close">×</button>
+      <div id="modalContent"></div>
+    </section>
+  </div>
+
+  <script>
+    const backdrop = document.getElementById("backdrop");
+    const content = document.getElementById("modalContent");
+
+    const templates = {
+      music: `
+        <h2 id="modalTitle">🎵 The Melody Planet</h2>
+        <p>Some songs say what words cannot.</p>
+        <div class="result">
+          ✨ My favourite song will live here.<br>
+          A song link and personal note can be added later.
+        </div>
+      `,
+
+      loves: `
+        <h2 id="modalTitle">🌷 Things I Love</h2>
+        <div class="result">
+          🌸 Flowers and soft skies<br>
+          🎧 Songs that feel like memories<br>
+          📚 Stories and imagination<br>
+          🌙 Quiet moments and unexpected magic
+        </div>
+      `,
+
+      mood: `
+        <h2 id="modalTitle">🌙 The Moonlit Room</h2>
+        <p>Choose the colour of your inner sky.</p>
+        <div class="actions">
+          <button class="btn mood" data-mood="Happy">☀️ Happy</button>
+          <button class="btn mood" data-mood="Peaceful">🌿 Peaceful</button>
+          <button class="btn mood" data-mood="Dreamy">✨ Dreamy</button>
+          <button class="btn mood" data-mood="Thoughtful">🌙 Thoughtful</button>
+          <button class="btn mood" data-mood="Motivated">🔥 Motivated</button>
+        </div>
+        <div class="result" id="moodResult">Choose a mood to reveal a message.</div>
+      `,
+
+      mystery: `
+        <h2 id="modalTitle">🔮 The Mystery Planet</h2>
+        <p>Choose one little way to leave some magic.</p>
+        <div class="actions">
+          <button class="btn" data-kind="song">🎵 Song</button>
+          <button class="btn" data-kind="flower">🌸 Flower</button>
+          <button class="btn" data-kind="message">💌 Anonymous message</button>
+        </div>
+        <div id="mysteryForm" class="result">
+          Your submissions will be saved privately after the secure backend
+          is connected. This preview does not send or save messages.
+        </div>
+      `,
+
+      garden: `
+        <h2 id="modalTitle">🦋 The Stardust Garden</h2>
+        <p>Every visitor will help the castle grow.</p>
+        <div class="result">
+          🌱 100 visits — The garden awakens<br>
+          🌷 250 visits — Flowers begin to bloom<br>
+          ✨ 500 visits — The castle shines brighter<br>
+          🌌 1,000 visits — The celestial garden appears
+        </div>
+        <p>These are planned milestones, not a live visitor count yet.</p>
+      `,
+
+      royal: `
+        <h2 id="modalTitle">👑 The Royal Chamber</h2>
+        <p>Your private creator dashboard is planned for the next stage.</p>
+        <div class="result">
+          ✧ Edit music, moods, favourites, and quotes<br>
+          ✧ Read visitor messages privately<br>
+          ✧ View visit totals and milestones
+        </div>
+        <p>
+          Login and private storage are not active yet.
+          We will connect secure authentication before storing real messages.
+        </p>
+      `
+    };
+
+    function openModal(name) {
+      content.innerHTML = templates[name] || templates.mystery;
+      backdrop.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      backdrop.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    document.querySelectorAll("[data-open]").forEach(button => {
+      button.addEventListener("click", () => openModal(button.dataset.open));
+    });
+
+    document.getElementById("exploreButton").addEventListener("click", () => {
+      document.getElementById("rooms").scrollIntoView({ behavior: "smooth" });
+    });
+
+    document.getElementById("visitButton").addEventListener("click", () => {
+      document.getElementById("visitors").scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    });
+
+    document.getElementById("closeModal").addEventListener("click", closeModal);
+
+    backdrop.addEventListener("click", event => {
+      if (event.target === backdrop) closeModal();
+
+      const moodButton = event.target.closest("[data-mood]");
+
+      if (moodButton) {
+        const messages = {
+          Happy: "A little sunshine is finding its way through the clouds. ☀️",
+          Peaceful: "Let the world be quiet for a moment. 🌿",
+          Dreamy: "Somewhere between a wish and a star, an idea is blooming. ✨",
+          Thoughtful: "Even the moon has a faraway side. Take your time. 🌙",
+          Motivated: "One small brave step can change the whole horizon. 🔥"
+        };
+
+        document.getElementById("moodResult").textContent =
+          messages[moodButton.dataset.mood];
+      }
+
+      const kindButton = event.target.closest("[data-kind]");
+
+      if (kindButton) {
+        const kind = kindButton.dataset.kind;
+        const form = document.getElementById("mysteryForm");
+
+        if (kind === "song") {
+          form.innerHTML = `
+            <strong>🎵 Dedicate a song</strong>
+            <p>This form is a preview and will not send anything yet.</p>
+            <label class="field">Song title
+              <input placeholder="Enter the song title">
+            </label>
+            <label class="field">Artist (optional)
+              <input placeholder="Enter the artist">
+            </label>
+            <label class="field">A little note (optional)
+              <textarea placeholder="Why did you choose this song?"></textarea>
+            </label>
+          `;
+        }
+
+        if (kind === "flower") {
+          form.innerHTML = `
+            <strong>🌸 Dedicate a flower</strong>
+            <p>This form is a preview and will not send anything yet.</p>
+            <label class="field">Choose a flower
+              <select>
+                <option>Rose 🌹</option>
+                <option>Sunflower 🌻</option>
+                <option>Tulip 🌷</option>
+                <option>Daisy 🌼</option>
+                <option>Lavender 💜</option>
+                <option>Cherry blossom 🌸</option>
+                <option>Lotus 🪷</option>
+              </select>
+            </label>
+            <label class="field">A little note (optional)
+              <textarea placeholder="Why this flower?"></textarea>
+            </label>
+          `;
+        }
+
+        if (kind === "message") {
+          form.innerHTML = `
+            <strong>💌 Anonymous message</strong>
+            <p>This form is a preview and will not send anything yet.</p>
+            <label class="field">Your message
+              <textarea placeholder="Write a little message..."></textarea>
+            </label>
+          `;
+        }
+      }
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeModal();
+    });
+  </script>
+</body>
+</html>
