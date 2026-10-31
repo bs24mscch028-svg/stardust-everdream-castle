@@ -161,9 +161,8 @@
         }
 
         document.getElementById("password").value = "";
-        status.textContent =
-          "✨ Login successful! Your owner session is active. " +
-          "The private dashboard is the next step.";
+        window.location.href = "/owner-dashboard.html";
+return;
       } catch (error) {
         status.textContent =
           "Unable to connect. Please try again after the website loads.";
