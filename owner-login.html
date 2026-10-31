@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#211638">
+  <title>Owner Login | Stardust Everdream Castle</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      font-family: Georgia, serif;
+      color: #fff7ff;
+      background:
+        radial-gradient(circle at top, #61447e, transparent 45%),
+        linear-gradient(135deg, #171126, #302044, #171126);
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 410px;
+      padding: 35px 25px;
+      text-align: center;
+      border: 1px solid #d8b8ff66;
+      border-radius: 24px;
+      background: #21182eeF;
+      box-shadow: 0 20px 70px #0005;
+    }
+
+    .moon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 27px;
+      margin: 0 0 12px;
+    }
+
+    p {
+      line-height: 1.6;
+      color: #e0d2ef;
+    }
+
+    label {
+      display: block;
+      margin: 22px 0 8px;
+      text-align: left;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #bca0d8;
+      border-radius: 12px;
+      background: #ffffff0d;
+      color: white;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 18px;
+      padding: 14px;
+      border: 0;
+      border-radius: 12px;
+      background: #d9b8ff;
+      color: #251633;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    #status {
+      min-height: 24px;
+      overflow-wrap: anywhere;
+    }
+
+    a {
+      color: #e4c9ff;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="login-card">
+    <div class="moon">🌙</div>
+
+    <h1>The Royal Chamber</h1>
+
+    <p>
+      Welcome back, castle keeper.<br>
+      Enter your private password to continue.
+    </p>
+
+    <form id="loginForm">
+      <label for="password">Owner password</label>
+
+      <input
+        id="password"
+        name="password"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Enter your password"
+        required
+      >
+
+      <button id="loginButton" type="submit">
+        ✨ Enter My Castle
+      </button>
+    </form>
+
+    <p id="status" role="status" aria-live="polite"></p>
+
+    <p>
+      <a href="/">Return to the castle</a>
+    </p>
+  </main>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const button = document.getElementById("loginButton");
+    const status = document.getElementById("status");
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+
+      const password = document.getElementById("password").value;
+      button.disabled = true;
+      status.textContent = "Checking your key... ✨";
+
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ password })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          status.textContent =
+            "Login unsuccessful. Check your password and try again.";
+          return;
+        }
+
+        document.getElementById("password").value = "";
+        status.textContent =
+          "✨ Login successful! Your owner session is active. " +
+          "The private dashboard is the next step.";
+      } catch (error) {
+        status.textContent =
+          "Unable to connect. Please try again after the website loads.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
