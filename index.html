@@ -524,6 +524,75 @@
   cursor: pointer;
 }
   </style>
+  <style>
+  /* Apply the saved colours throughout the castle */
+  body {
+    background: var(--theme-background, #fbf5ff);
+    color: var(--theme-text, #392448);
+  }
+
+  main {
+    background: var(--theme-background, #fbf5ff);
+  }
+
+  .quote {
+    color: var(--theme-text, #543763);
+    background: linear-gradient(
+      100deg,
+      var(--theme-accent2, #ead7fa),
+      var(--theme-background, #fae1ef)
+    );
+  }
+
+  .room {
+    color: var(--theme-text, #392448);
+    background: var(--theme-surface, #ffffff);
+    border-color: var(--theme-accent2, #e8d8f1);
+  }
+
+  .room h3,
+  .section-heading h2 {
+    color: var(--theme-text, #392448);
+  }
+
+  .counter {
+    background: var(--theme-surface, #ffffff);
+    border-color: var(--theme-accent2, #e3d0ef);
+  }
+
+  .counter h2 {
+    color: var(--theme-accent, #77519a);
+  }
+
+  .btn.primary {
+    color: var(--theme-text, #392448);
+    background: var(--theme-accent2, #f3cce8);
+  }
+
+  .modal {
+    color: var(--theme-text, #392448);
+    background: var(--theme-surface, #fffaff);
+    border-color: var(--theme-accent2, #e8d8f1);
+  }
+
+  .field input,
+  .field textarea,
+  .field select {
+    color: var(--theme-text, #392448);
+    border-color: var(--theme-accent2, #dfcde9);
+    background: var(--theme-surface, #ffffff);
+  }
+
+  .result {
+    color: var(--theme-text, #392448);
+    background: var(--theme-background, #f4eafa);
+  }
+
+  footer {
+    color: var(--theme-text, #897796);
+    background: var(--theme-background, #fbf5ff);
+  }
+</style>
   <script>
 (async function loadCastleTheme() {
   try {
