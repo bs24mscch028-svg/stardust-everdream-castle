@@ -160,7 +160,35 @@
     <p id="pageStatus" role="status" aria-live="polite">
       ✨ Checking your owner session...
     </p>
+<section class="card" id="themeStudio">
+  <h2>🎨 Theme Studio</h2>
+  <p>Choose the colours of your castle. Your choice will update the website for everyone!</p>
 
+  <label for="themePreset">Choose a theme</label>
+  <select id="themePreset">
+    <option value="lavender">💜 Lavender Galaxy</option>
+    <option value="pink">🌸 Pastel Pink</option>
+    <option value="mint">🌿 Mint Dream</option>
+    <option value="midnight">🌌 Midnight Purple</option>
+    <option value="peach">☀️ Peach Sunshine</option>
+    <option value="custom">🎨 Custom Colours</option>
+  </select>
+
+  <div class="theme-colours">
+    <label>Background <input type="color" id="themeBackground" value="#f6f0ff"></label>
+    <label>Cards <input type="color" id="themeSurface" value="#ffffff"></label>
+    <label>Main colour <input type="color" id="themeAccent" value="#9b7ede"></label>
+    <label>Secondary colour <input type="color" id="themeAccent2" value="#e8b8e8"></label>
+    <label>Text <input type="color" id="themeText" value="#35264b"></label>
+  </div>
+
+  <button class="btn" type="button" id="saveThemeButton">
+    ✨ Save Website Theme
+  </button>
+
+  <p id="themeSaveMessage" role="status" aria-live="polite"></p>
+</section>
+    
     <div class="grid">
       <section class="card">
         <h2>💌 Mystery Mail</h2>
@@ -416,7 +444,184 @@ if (loveEntries.length === 0) {
         window.location.replace("/owner-login.html");
       }
     });
+// 🎨 Stardust Everdream Castle — Global Theme Studio
+const themePresets = {
+  lavender: {
+    name: "Lavender Galaxy",
+    background: "#f6f0ff",
+    surface: "#ffffff",
+    accent: "#9b7ede",
+    accent2: "#e8b8e8",
+    text: "#35264b"
+  },
+  pink: {
+    name: "Pastel Pink",
+    background: "#fff0f6",
+    surface: "#ffffff",
+    accent: "#e879a9",
+    accent2: "#f4b7d2",
+    text: "#4d2638"
+  },
+  mint: {
+    name: "Mint Dream",
+    background: "#eafaf3",
+    surface: "#ffffff",
+    accent: "#54a98b",
+    accent2: "#b6ead6",
+    text: "#214236"
+  },
+  midnight: {
+    name: "Midnight Purple",
+    background: "#21172f",
+    surface: "#302340",
+    accent: "#b49aff",
+    accent2: "#e8b8e8",
+    text: "#f8f1ff"
+  },
+  peach: {
+    name: "Peach Sunshine",
+    background: "#fff3e8",
+    surface: "#ffffff",
+    accent: "#e99b73",
+    accent2: "#ffd0b4",
+    text: "#50372d"
+  }
+};
 
+const themeFields = {
+  background: document.getElementById("themeBackground"),
+  surface: document.getElementById("themeSurface"),
+  accent: document.getElementById("themeAccent"),
+  accent2: document.getElementById("themeAccent2"),
+  text: document.getElementById("themeText")
+};
+
+function fillThemeControls(theme) {
+  Object.keys(themeFields).forEach(key => {
+    if (themeFields[key] && theme[key]) {
+      themeFields[key].value = theme[key];
+    }
+  });
+}
+
+function applyDashboardTheme(theme) {
+  const root = document.documentElement;
+
+  root.style.setProperty("--theme-background", theme.background);
+  root.style.setProperty("--theme-surface", theme.surface);
+  root.style.setProperty("--theme-accent", theme.accent);
+  root.style.setProperty("--theme-accent2", theme.accent2);
+  root.style.setProperty("--theme-text", theme.text);
+}
+
+const themePresetSelect = document.getElementById("themePreset");
+const themeMessage = document.getElementById("themeSaveMessage");
+
+if (themePresetSelect) {
+  themePresetSelect.addEventListener("change", () => {
+    const selected = themePresetSelect.value;
+
+    if (themePresets[selected]) {
+      fillThemeControls(themePresets[selected]);
+    }
+  });
+}
+
+Object.values(themeFields).forEach(input => {
+  if (input) {
+    input.addEventListener("input", () => {
+      if (themePresetSelect) {
+        themePresetSelect.value = "custom";
+      }
+    });
+  }
+});
+
+// Load the saved website-wide theme.
+async function loadWebsiteTheme() {
+  try {
+    const response = await fetch("/api/site-settings", {
+      cache: "no-store"
+    });
+
+    const result = await response.json();
+
+    if (result.success && result.theme) {
+      fillThemeControls(result.theme);
+      applyDashboardTheme(result.theme);
+
+      const matchingPreset = Object.keys(themePresets).find(key =>
+        Object.keys(themeFields).every(
+          field => themePresets[key][field] === result.theme[field]
+        )
+      );
+
+      if (themePresetSelect) {
+        themePresetSelect.value = matchingPreset || "custom";
+      }
+    }
+  } catch (error) {
+    console.error("Could not load the website theme:", error);
+  }
+}
+
+// Save the theme for all website visitors.
+const saveThemeButton = document.getElementById("saveThemeButton");
+
+if (saveThemeButton) {
+  saveThemeButton.addEventListener("click", async () => {
+    const theme = {
+      name: themePresetSelect?.value === "custom"
+        ? "Custom Theme"
+        : (themePresets[themePresetSelect?.value]?.name || "Custom Theme"),
+      background: themeFields.background?.value,
+      surface: themeFields.surface?.value,
+      accent: themeFields.accent?.value,
+      accent2: themeFields.accent2?.value,
+      text: themeFields.text?.value
+    };
+
+    if (themeMessage) {
+      themeMessage.textContent = "✨ Saving your castle's colours...";
+    }
+
+    saveThemeButton.disabled = true;
+
+    try {
+      const response = await fetch("/api/site-settings", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ theme })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Could not save the theme.");
+      }
+
+      fillThemeControls(result.theme);
+      applyDashboardTheme(result.theme);
+
+      if (themeMessage) {
+        themeMessage.textContent =
+          "✨ " + result.message + " The saved theme is ready to be applied to the public castle.";
+      }
+    } catch (error) {
+      if (themeMessage) {
+        themeMessage.textContent =
+          "❌ " + (error.message || "Could not save the theme. Please log in again.");
+      }
+    } finally {
+      saveThemeButton.disabled = false;
+    }
+  });
+}
+
+loadWebsiteTheme();
     loadDashboard();
   </script>
 </body>
