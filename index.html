@@ -1154,39 +1154,92 @@
     }
   });
   
-  // Handle form submissions without reloading the website.
-  // Actual delivery and private storage require a connected backend.
-  document.addEventListener("submit", event => {
-    const form = event.target;
+ // Send Mystery Planet submissions to the database.
+document.addEventListener("submit", async event => {
+  const form = event.target;
 
-    if (
-      !form.matches(
-        "#songForm, #flowerForm, #messageForm"
-      )
-    ) {
-      return;
+  if (!form.matches("#songForm, #flowerForm, #messageForm")) {
+    return;
+  }
+
+  // Keep the separate Melody Planet song form independent.
+  if (form.querySelector('[name="songArtist"]')) {
+    return;
+  }
+
+  event.preventDefault();
+
+  const statusId = {
+    songForm: "songStatus",
+    flowerForm: "flowerStatus",
+    messageForm: "messageStatus"
+  }[form.id];
+
+  const status = document.getElementById(statusId);
+  const button = form.querySelector('[type="submit"]');
+
+  if (button) button.disabled = true;
+  if (status) status.textContent = "✨ Sending your message...";
+
+  try {
+    const data = new FormData(form);
+    const fields = [];
+
+    for (const [name, value] of data.entries()) {
+      if (typeof value !== "string" || !value.trim()) continue;
+
+      const input = form.elements.namedItem(name);
+      const label = input?.id
+        ? form.querySelector(`label[for="${input.id}"]`)
+        : null;
+
+      fields.push(
+        `${label?.textContent?.trim() || name}: ${value.trim()}`
+      );
     }
 
-    event.preventDefault();
-
-    let statusId = "";
-
-    if (form.id === "songForm") {
-      statusId = "songStatus";
-    } else if (form.id === "flowerForm") {
-      statusId = "flowerStatus";
-    } else if (form.id === "messageForm") {
-      statusId = "messageStatus";
+    if (!fields.length) {
+      throw new Error("Please fill in your message first.");
     }
 
-    const status = document.getElementById(statusId);
+    const messageType =
+      form.id === "flowerForm" ? "flower" :
+      form.id === "songForm" ? "song" :
+      "anonymous";
+
+    const response = await fetch("/api/messages", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: fields.join("\n"),
+        message_type: messageType
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "The message could not be saved.");
+    }
 
     if (status) {
-      status.textContent =
-        "✨ Preview only: your entry has not been sent or saved. " +
-        "A secure backend must be connected to deliver it.";
+      status.textContent = "✨ Your message has been saved!";
     }
-  });
+
+    form.reset();
+
+  } catch (error) {
+    if (status) {
+      status.textContent =
+        error.message || "Something went wrong. Please try again.";
+    }
+  } finally {
+    if (button) button.disabled = false;
+  }
+}); 
 </script> 
 </body>
  <!-- Stardust Everdream Castle update -->
