@@ -1327,12 +1327,20 @@ document.addEventListener("submit", async event => {
         body: JSON.stringify({ mood, note })
       });
 
-      const data = await response.json();
+     const responseText = await response.text();
+let data;
 
-      if (!response.ok || !data.success) {
-        throw new Error(data.message || "Your memory could not be saved.");
-      }
+try {
+  data = JSON.parse(responseText);
+} catch {
+  throw new Error(
+    `Server returned an invalid response (HTTP ${response.status}). Please try again.`
+  );
+}
 
+if (!response.ok || !data.success) {
+  throw new Error(data.message || "Your memory could not be saved.");
+} 
       if (status) {
         status.textContent = "✨ Your Moonlit Memory has been saved!";
       }
