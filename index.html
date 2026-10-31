@@ -785,18 +785,39 @@
     </div>
   `,
 
-  mood: `
-    <h2 id="modalTitle">🌙 The Moonlit Room</h2>
-    <p>Choose the colour of your inner sky.</p>
-    <div class="actions">
-      <button class="btn mood" data-mood="Happy">☀️ Happy</button>
-      <button class="btn mood" data-mood="Peaceful">🌿 Peaceful</button>
-      <button class="btn mood" data-mood="Dreamy">✨ Dreamy</button>
-      <button class="btn mood" data-mood="Thoughtful">🌙 Thoughtful</button>
-      <button class="btn mood" data-mood="Motivated">🔥 Motivated</button>
-    </div>
+   mood: `
+    <h2 id="modalTitle">🌙 Moonlit Memories</h2>
+    <p>Choose the colour of your inner sky, then save a little piece of this moment.</p>
+
+    <form id="moodForm" class="result">
+      <label class="field">
+        Choose your mood
+        <select name="mood" required>
+          <option value="">Choose a mood</option>
+          <option value="Happy">☀️ Happy</option>
+          <option value="Peaceful">🌿 Peaceful</option>
+          <option value="Dreamy">✨ Dreamy</option>
+          <option value="Thoughtful">🌙 Thoughtful</option>
+          <option value="Motivated">🔥 Motivated</option>
+          <option value="Loved">💗 Loved</option>
+          <option value="Grateful">🌸 Grateful</option>
+          <option value="Excited">🦋 Excited</option>
+          <option value="Hopeful">🌈 Hopeful</option>
+          <option value="Sad">🌧️ Sad</option>
+        </select>
+      </label>
+
+      <label class="field">
+        A little memory or note (optional)
+        <textarea name="note" maxlength="1000" placeholder="What is colouring your sky today?"></textarea>
+      </label>
+
+      <button class="btn primary" type="submit">🌙 Save My Memory</button>
+      <p id="moodStatus" role="status" aria-live="polite"></p>
+    </form>
+
     <div class="result" id="moodResult">
-      Choose a mood to reveal a message.
+      Choose a mood and save your memory.
     </div>
   `,
 
