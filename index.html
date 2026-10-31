@@ -1081,6 +1081,79 @@
     }
   });
 
+    // Save the Melody Planet song in this browser.
+  document.addEventListener("submit", event => {
+    const form = event.target;
+
+    if (!form.matches("#songForm") || !form.closest("#backdrop")) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const title = form.querySelector('[name="songTitle"]').value.trim();
+    const artist = form.querySelector('[name="songArtist"]')?.value.trim() || "";
+    const link = form.querySelector('[name="songLink"]')?.value.trim() || "";
+    const note = form.querySelector('[name="songNote"]')?.value.trim() || "";
+
+    if (!title) return;
+
+    const song = { title, artist, link, note };
+
+    try {
+      localStorage.setItem("everdreamFavouriteSong", JSON.stringify(song));
+    } catch (error) {
+      const result = document.getElementById("songResult");
+      if (result) result.textContent = "Your browser couldn't save this song. Please try again.";
+      return;
+    }
+
+    const result = document.getElementById("songResult");
+
+    if (result) {
+      result.replaceChildren();
+
+      const heading = document.createElement("h3");
+      heading.textContent = "🎶 " + title;
+      result.appendChild(heading);
+
+      if (artist) {
+        const artistLine = document.createElement("p");
+        artistLine.textContent = "Artist: " + artist;
+        result.appendChild(artistLine);
+      }
+
+      if (note) {
+        const noteLine = document.createElement("p");
+        noteLine.textContent = note;
+        result.appendChild(noteLine);
+      }
+
+      if (link) {
+        try {
+          const parsedLink = new URL(link);
+
+          if (parsedLink.protocol === "https:" || parsedLink.protocol === "http:") {
+            const playLink = document.createElement("a");
+            playLink.href = parsedLink.href;
+            playLink.target = "_blank";
+            playLink.rel = "noopener noreferrer";
+            playLink.textContent = "▶ Open my song";
+            result.appendChild(playLink);
+          }
+        } catch (error) {
+          const warning = document.createElement("p");
+          warning.textContent = "The song link is invalid. You can edit it and try again.";
+          result.appendChild(warning);
+        }
+      }
+
+      const confirmation = document.createElement("p");
+      confirmation.textContent = "✨ Your song is saved in this browser!";
+      result.appendChild(confirmation);
+    }
+  });
+  
   // Handle form submissions without reloading the website.
   // Actual delivery and private storage require a connected backend.
   document.addEventListener("submit", event => {
