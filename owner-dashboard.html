@@ -796,6 +796,89 @@ if (saveThemeButton) {
 }
 
 loadWebsiteTheme();
+    // 🎶 My Castle's Music — load and save the owner's current song.
+const currentSongSource = document.getElementById("currentSongSource");
+const currentSongUrl = document.getElementById("currentSongUrl");
+const saveCurrentSongButton = document.getElementById("saveCurrentSongButton");
+const currentSongStatus = document.getElementById("currentSongStatus");
+
+// Load the song currently saved for all visitors.
+async function loadCurrentSong() {
+  try {
+    const response = await fetch("/api/current-song", {
+      credentials: "same-origin",
+      cache: "no-store"
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error("Could not load the saved song.");
+    }
+
+    if (result.song) {
+      currentSongSource.value = result.song.source || "youtube";
+      currentSongUrl.value = result.song.url || "";
+
+      currentSongStatus.textContent =
+        "🎶 Your current song is loaded. Save a new link whenever you want to replace it.";
+    } else {
+      currentSongStatus.textContent =
+        "🌙 No current song saved yet. Choose a song link below.";
+    }
+  } catch (error) {
+    currentSongStatus.textContent =
+      "⚠️ Could not load your current song. You can still try saving a link.";
+  }
+}
+
+// Save or replace the current song.
+if (saveCurrentSongButton) {
+  saveCurrentSongButton.addEventListener("click", async () => {
+    const source = currentSongSource.value;
+    const url = currentSongUrl.value.trim();
+
+    if (!url) {
+      currentSongStatus.textContent =
+        "💜 Please paste a song link first.";
+      currentSongUrl.focus();
+      return;
+    }
+
+    saveCurrentSongButton.disabled = true;
+    currentSongStatus.textContent = "✨ Saving your Castle's Heartbeat...";
+
+    try {
+      const response = await fetch("/api/current-song", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ source, url })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Could not save the song.");
+      }
+
+      currentSongSource.value = result.song.source;
+      currentSongUrl.value = result.song.url;
+
+      currentSongStatus.textContent =
+        "💜 " + (result.message || "Your current song has been saved!");
+    } catch (error) {
+      currentSongStatus.textContent =
+        "⚠️ " + (error.message || "Could not save the song. Please try again.");
+    } finally {
+      saveCurrentSongButton.disabled = false;
+    }
+  });
+}
+
+loadCurrentSong();
     loadDashboard();
   </script>
 </body>
