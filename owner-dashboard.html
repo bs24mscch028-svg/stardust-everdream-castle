@@ -235,10 +235,48 @@
 
 
       <section class="card">
-        <h2>🏰 Castle Visitors</h2>
-        <div class="count">Recorded visits</div>
-        <div id="visitorCount" class="empty">Waiting for secure access...</div>
-      </section>
+  <h2>🏰 Castle Visitors</h2>
+
+  <div class="count">Recorded visits</div>
+
+  <div id="visitorCount" class="empty">
+    Waiting for secure access...
+  </div>
+
+  <hr>
+
+  <h3>✨ Stardust Milestones</h3>
+
+  <p id="milestoneMessage">
+    Your next magical milestone awaits!
+  </p>
+
+  <div
+    style="width:100%; height:18px; background:#eee5fa; border-radius:20px; overflow:hidden;"
+    role="progressbar"
+    aria-label="Progress toward the next visitor milestone"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-valuenow="0"
+    id="milestoneProgressBar"
+  >
+    <div
+      id="milestoneProgress"
+      style="width:0%; height:100%; background:linear-gradient(90deg,#a78bfa,#f0abfc); border-radius:20px; transition:width 0.5s ease;"
+    ></div>
+  </div>
+
+  <p id="milestoneProgressText">
+    0% toward your next milestone
+  </p>
+
+  <div id="milestoneList" style="line-height:2;">
+    🌟 100 visits<br>
+    🦋 250 visits<br>
+    💜 500 visits<br>
+    👑 1,000 visits
+  </div>
+</section>
     </div>
   </main>
 
