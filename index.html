@@ -1680,6 +1680,125 @@ if (!response.ok || !data.success) {
   }
 })();
 </script>
+<script>
+const keepsakeQuestions = {
+  about: [
+    "What is one little thing that always makes you smile?",
+    "What is your favourite way to spend a peaceful day?",
+    "Which song feels like it understands you?",
+    "What is a small thing you are secretly proud of?",
+    "What is your favourite childhood memory?",
+    "What kind of weather matches your personality?",
+    "What is something that instantly comforts you?",
+    "Which fictional character do you relate to most?",
+    "What is one habit that makes your day better?",
+    "What is something people might be surprised to learn about you?"
+  ],
+  tell: [
+    "Is there something you have always wanted to tell me?",
+    "What was your first impression of me?",
+    "What is one thing you appreciate about me?",
+    "Is there a question you have wanted to ask me?",
+    "What is one memory of us that you treasure?",
+    "What do you wish people understood about you?",
+    "What is something kind someone once said to you?",
+    "What is one thing you find difficult to express?",
+    "If you could send me one sentence, what would it be?",
+    "What is something you hope I never forget?"
+  ],
+  dreams: [
+    "If you could live anywhere for a year, where would you go?",
+    "What is one dream you hope to fulfil someday?",
+    "What would you do if you knew you could not fail?",
+    "What kind of life would make you feel truly happy?",
+    "What is something new you would love to learn?",
+    "If money were no concern, how would you spend your time?",
+    "What is one place you dream of visiting?",
+    "What would your perfect ordinary day look like?",
+    "What is one promise you want to make to your future self?",
+    "Where do you imagine yourself five years from now?"
+  ],
+  feelings: [
+    "When do you feel most understood?",
+    "What helps you when you are having a difficult day?",
+    "What is something that makes you feel appreciated?",
+    "When was the last time you felt genuinely peaceful?",
+    "What is one feeling you find hard to explain?",
+    "What does feeling safe with someone mean to you?",
+    "What do you wish people asked you more often?",
+    "What helps you feel better when you miss someone?",
+    "What is something your heart needs more of lately?",
+    "What does happiness mean to you right now?"
+  ],
+  fun: [
+    "If you were a star, what would your name be?",
+    "Which three things would you take to a magical island?",
+    "If your life were a movie, what would its title be?",
+    "Would you rather explore the ocean or outer space?",
+    "What food could you happily eat every week?",
+    "If animals could talk, which would be the funniest?",
+    "What would your dream room look like?",
+    "Which fictional world would you love to visit?",
+    "If you had a superpower for one day, what would it be?",
+    "What is the most random thing that makes you happy?"
+  ],
+  unwritten: [
+    "What chapter of your life are you living right now?",
+    "What is something you are still learning about yourself?",
+    "If your heart could write a letter, what would it say?",
+    "What memory would you keep in a little glass bottle?",
+    "What would you tell your younger self?",
+    "What are you ready to leave behind?",
+    "What is something you hope your future self remembers?",
+    "Which unanswered question do you think about sometimes?",
+    "What does a fresh start mean to you?",
+    "If this moment had a name, what would you call it?"
+  ]
+};
+
+let usedKeepsakeQuestions = [];
+
+document.addEventListener("click", function (event) {
+  const button = event.target.closest("#pickKeepsakeQuestion");
+  if (!button) return;
+
+  const categorySelect = document.getElementById("keepsakeCategory");
+  const questionBox = document.getElementById("keepsakeQuestion");
+
+  if (!categorySelect || !questionBox) return;
+
+  const category = categorySelect.value;
+  let available = [];
+
+  if (category === "all") {
+    available = Object.values(keepsakeQuestions).flat();
+  } else {
+    available = keepsakeQuestions[category] || [];
+  }
+
+  available = available.filter(function (question) {
+    return !usedKeepsakeQuestions.includes(question);
+  });
+
+  if (available.length === 0) {
+    usedKeepsakeQuestions = [];
+    available = category === "all"
+      ? Object.values(keepsakeQuestions).flat()
+      : (keepsakeQuestions[category] || []);
+  }
+
+  if (available.length === 0) {
+    questionBox.textContent = "✨ No questions found. Please try another category.";
+    return;
+  }
+
+  const question = available[Math.floor(Math.random() * available.length)];
+  usedKeepsakeQuestions.push(question);
+
+  questionBox.textContent = question;
+  questionBox.dataset.question = question;
+});
+</script>
 </body>
  <!-- Stardust Everdream Castle update -->
 </html>
