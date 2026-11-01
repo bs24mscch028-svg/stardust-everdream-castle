@@ -1873,6 +1873,78 @@ document.addEventListener("click", function (event) {
   questionBox.dataset.question = question;
 });
 </script>
+  <script>
+document.addEventListener("click", async function (event) {
+  const button = event.target.closest("#sendKeepsakeAnswer");
+  if (!button) return;
+
+  const nicknameField = document.getElementById("keepsakeNickname");
+  const answerField = document.getElementById("keepsakeAnswer");
+  const questionBox = document.getElementById("keepsakeQuestion");
+  const status = document.getElementById("keepsakeStatus");
+
+  if (!nicknameField || !answerField || !questionBox || !status) {
+    return;
+  }
+
+  const nickname = nicknameField.value.trim();
+  const answer = answerField.value.trim();
+  const question = questionBox.dataset.question || "";
+
+  if (!question) {
+    status.textContent = "✨ Please pick a question first!";
+    return;
+  }
+
+  if (!answer) {
+    status.textContent = "💌 Please write your answer first.";
+    answerField.focus();
+    return;
+  }
+
+  if (nickname.length > 40 || answer.length > 1500) {
+    status.textContent = "✨ Please check the length of your nickname and answer.";
+    return;
+  }
+
+  button.disabled = true;
+  status.textContent = "💫 Sending your little piece of stardust...";
+
+  try {
+    const response = await fetch("/api/keepsakes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        nickname: nickname,
+        question: question,
+        answer: answer
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Unable to send your answer.");
+    }
+
+    status.textContent =
+      "💜 Your answer has been sent! Thank you for sharing your little universe. ✨";
+
+    answerField.value = "";
+    nicknameField.value = "";
+    questionBox.dataset.question = "";
+    questionBox.textContent =
+      "✨ Your answer is safe with the castle. Pick another question to continue!";
+  } catch (error) {
+    status.textContent =
+      "🌙 Your answer couldn't be sent. Please try again in a moment.";
+  } finally {
+    button.disabled = false;
+  }
+});
+</script>
 </body>
  <!-- Stardust Everdream Castle update -->
 </html>
