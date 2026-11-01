@@ -33,7 +33,10 @@ export async function onRequestGet({ request, env }) {
 
     if (!session || session.expires_at <= Date.now()) {
       return Response.json(
-        { success: false, message: "Your session has expired. Please log in again." },
+        {
+          success: false,
+          message: "Your session has expired. Please log in again."
+        },
         {
           status: 401,
           headers: { "Cache-Control": "no-store" }
@@ -41,72 +44,71 @@ export async function onRequestGet({ request, env }) {
       );
     }
 
-    // Only a verified owner session can reach these private queries.
-   const [
-  messagesResult,
-  songsResult,
-  moodsResult,
-  visitsResult,
-  loveEntriesResult,
-  keepsakeAnswersResult
-] = 
-      await Promise.all([
-        env.DB.prepare(
-          `SELECT id, message, message_type, created_at
-           FROM messages
-           ORDER BY id DESC
-           LIMIT 500`
-        ).all(),
+    // Load private dashboard data only after verifying the owner session.
+    const [
+      messagesResult,
+      songsResult,
+      moodsResult,
+      visitsResult,
+      loveEntriesResult,
+      keepsakeAnswersResult
+    ] = await Promise.all([
+      env.DB.prepare(
+        `SELECT id, message, message_type, created_at
+         FROM messages
+         ORDER BY id DESC
+         LIMIT 500`
+      ).all(),
 
-       env.DB.prepare(
-  `SELECT id, category, title, content, created_at
-   FROM love_entries
-   ORDER BY id DESC
-   LIMIT 500`
-).all(),
+      env.DB.prepare(
+        `SELECT id, title, artist, song_url, note, created_at
+         FROM songs
+         ORDER BY id DESC
+         LIMIT 500`
+      ).all(),
 
-env.DB.prepare(
-  `SELECT id, nickname, question, answer, created_at
-   FROM keepsake_answers
-   ORDER BY id DESC
-   LIMIT 500`
-).all(),
+      env.DB.prepare(
+        `SELECT id, mood, note, created_at
+         FROM moods
+         ORDER BY id DESC
+         LIMIT 500`
+      ).all(),
 
-        env.DB.prepare(
-          `SELECT id, mood, note, created_at
-           FROM moods
-           ORDER BY id DESC
-           LIMIT 500`
-        ).all(),
+      env.DB.prepare(
+        "SELECT COUNT(*) AS total FROM visits"
+      ).first(),
 
-        env.DB.prepare(
-  "SELECT COUNT(*) AS total FROM visits"
-).first(),
+      env.DB.prepare(
+        `SELECT id, category, title, content, created_at
+         FROM love_entries
+         ORDER BY id DESC
+         LIMIT 500`
+      ).all(),
 
-env.DB.prepare(
-  `SELECT id, category, title, content, created_at
-   FROM love_entries
-   ORDER BY id DESC
-   LIMIT 500`
-).all()
-      ]);
+      env.DB.prepare(
+        `SELECT id, nickname, question, answer, created_at
+         FROM keepsake_answers
+         ORDER BY id DESC
+         LIMIT 500`
+      ).all()
+    ]);
 
-return Response.json(
-  {
-    success: true,
-    messages: messagesResult.results || [],
-    songs: songsResult.results || [],
-    moods: moodsResult.results || [],
-    visits: Number(visitsResult?.total || 0),
-    loveEntries: loveEntriesResult.results || [],
-keepsakeAnswers: keepsakeAnswersResult.results || []
-  },
-  {
-    headers: {
-      "Cache-Control": "no-store"
-    }
-  }
-);
+    return Response.json(
+      {
+        success: true,
+        messages: messagesResult.results || [],
+        songs: songsResult.results || [],
+        moods: moodsResult.results || [],
+        visits: Number(visitsResult?.total || 0),
+        loveEntries: loveEntriesResult.results || [],
+        keepsakeAnswers: keepsakeAnswersResult.results || []
+      },
+      {
+        headers: {
+          "Cache-Control": "no-store"
+        }
+      }
+    );
   } catch (error) {
     return Response.json(
       {
@@ -120,3 +122,10 @@ keepsakeAnswers: keepsakeAnswersResult.results || []
     );
   }
 }
+
+        
+  
+   
+  
+
+   
