@@ -375,11 +375,25 @@
         const songs = Array.isArray(data.songs) ? data.songs : [];
         const moods = Array.isArray(data.moods) ? data.moods : [];
         const loveEntries = Array.isArray(data.loveEntries) ? data.loveEntries : [];
+      
+const keepsakeAnswers = Array.isArray(data.keepsakeAnswers)
+  ? data.keepsakeAnswers
+  : [];
 
         showText("messageCount", anonymous.length + " anonymous messages");
         showText("flowerCount", flowers.length + " flower dedications");
         showText("songCount", songs.length + " song dedications");
         showText("moodCount", moods.length + " saved moods");
+        
+showText("keepsakeCount", keepsakeAnswers.length + " saved answers");
+
+renderEntries("keepsakeAnswersList", keepsakeAnswers, item =>
+  "From: " + (item.nickname || "Anonymous") +
+  "\nQuestion: " + (item.question || "No question provided") +
+  "\nAnswer: " + (item.answer || "") +
+  "\nReceived: " + (item.created_at || "Date unavailable")
+);
+
 
         renderEntries("messagesList", anonymous, item =>
           item.message + "\nReceived: " + (item.created_at || "Date unavailable")
