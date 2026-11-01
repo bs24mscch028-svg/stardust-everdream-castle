@@ -451,6 +451,73 @@ try {
     "visitorCount",
     "✨ " + totalVisits.toLocaleString() + " recorded visits 🏰"
   );
+  // ✨ Calculate Stardust visitor milestones
+  const milestones = [100, 250, 500, 1000];
+
+  const nextMilestone = milestones.find(
+    milestone => totalVisits < milestone
+  );
+
+  const progressBar = document.getElementById("milestoneProgress");
+  const progressContainer = document.getElementById("milestoneProgressBar");
+  const progressText = document.getElementById("milestoneProgressText");
+  const milestoneMessage = document.getElementById("milestoneMessage");
+  const milestoneList = document.getElementById("milestoneList");
+
+  let progress = 100;
+  let message = "👑 All four milestones reached! Your castle is legendary!";
+
+  if (nextMilestone !== undefined) {
+    const previousMilestone = [...milestones]
+      .reverse()
+      .find(milestone => totalVisits >= milestone) || 0;
+
+    const visitsNeeded = nextMilestone - totalVisits;
+
+    progress = Math.round(
+      ((totalVisits - previousMilestone) /
+        (nextMilestone - previousMilestone)) * 100
+    );
+
+    message =
+      "✨ " + visitsNeeded.toLocaleString() +
+      " more visits until your " +
+      nextMilestone.toLocaleString() +
+      "-visit milestone!";
+  }
+
+  if (progressBar) {
+    progressBar.style.width = progress + "%";
+  }
+
+  if (progressContainer) {
+    progressContainer.setAttribute("aria-valuenow", String(progress));
+  }
+
+  if (progressText) {
+    progressText.textContent =
+      progress + "% toward your next milestone";
+  }
+
+  if (milestoneMessage) {
+    milestoneMessage.textContent = message;
+  }
+
+  if (milestoneList) {
+    milestoneList.innerHTML = milestones.map(milestone => {
+      const reached = totalVisits >= milestone;
+
+      return (
+        "<div>" +
+        (reached ? "✅ " : "🌟 ") +
+        milestone.toLocaleString() +
+        " visits " +
+        (reached ? "— Reached!" : "— Awaiting stardust") +
+        "</div>"
+      );
+    }).join("");
+  }
+  
 } catch (error) {
   showText(
     "visitorCount",
