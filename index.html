@@ -592,6 +592,79 @@
     color: var(--theme-text, #897796);
     background: var(--theme-background, #fbf5ff);
   }
+/* ✨ Stardust Keepsakes layout */
+#keepsakeCategory,
+#keepsakeNickname,
+#keepsakeAnswer {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 10px 0 18px;
+  padding: 13px 15px;
+  box-sizing: border-box;
+  border: 1px solid #d8c5f3;
+  border-radius: 14px;
+  background: #fffaff;
+  color: #35234d;
+  font: inherit;
+}
+
+#keepsakeCategory {
+  cursor: pointer;
+}
+
+#keepsakeQuestion.keepsake-question-box {
+  display: block;
+  width: 100%;
+  margin: 18px 0;
+  padding: 20px;
+  box-sizing: border-box;
+  border: 1px solid #ddcafa;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fbf5ff, #f2eaff, #fff5fa);
+  color: #493263;
+  text-align: center;
+  line-height: 1.8;
+  font-size: 1.05rem;
+  overflow-wrap: anywhere;
+}
+
+#pickKeepsakeQuestion,
+#sendKeepsakeAnswer {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 12px 0 20px;
+  padding: 14px 18px;
+  box-sizing: border-box;
+  border: 1px solid #d8c5f3;
+  border-radius: 16px;
+  cursor: pointer;
+  white-space: normal;
+  line-height: 1.5;
+}
+
+#keepsakeNickname,
+#keepsakeAnswer {
+  min-height: 48px;
+}
+
+#keepsakeAnswer {
+  min-height: 130px;
+  resize: vertical;
+}
+
+#keepsakeCategory:focus,
+#keepsakeNickname:focus,
+#keepsakeAnswer:focus {
+  outline: 2px solid #b79add;
+  outline-offset: 2px;
+}
+
+#keepsakeStatus {
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
 </style>
   <script>
 (async function loadCastleTheme() {
@@ -979,9 +1052,10 @@
       <option value="unwritten">🌌 The Unwritten Pages</option>
     </select>
 
-    <div class="result" id="keepsakeQuestion" aria-live="polite">
-      ✨ Click below to discover your first question!
-    </div>
+   <div class="result keepsake-question-box" id="keepsakeQuestion"
+     aria-live="polite" aria-atomic="true">
+  ✨ Your next little question is waiting to be discovered!
+</div> 
 
     <button class="btn" type="button" id="pickKeepsakeQuestion">
       ✨ Pick a Question for Me
