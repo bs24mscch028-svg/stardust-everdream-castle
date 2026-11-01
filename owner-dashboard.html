@@ -188,7 +188,33 @@
 
   <p id="themeSaveMessage" role="status" aria-live="polite"></p>
 </section>
-    
+  
+<section class="card" id="castleMusic">
+  <h2>🎶 My Castle's Music</h2>
+  <p>Choose the song that visitors can listen to in my castle. 💜</p>
+
+  <label for="currentSongSource">Choose a music source</label>
+  <select id="currentSongSource">
+    <option value="youtube">▶️ YouTube</option>
+    <option value="spotify">🎧 Spotify</option>
+    <option value="audio">🎵 Direct audio link</option>
+  </select>
+
+  <label for="currentSongUrl">Song link</label>
+  <input
+    type="url"
+    id="currentSongUrl"
+    placeholder="Paste your song link here"
+    maxlength="2000"
+  >
+
+  <button class="btn" type="button" id="saveCurrentSongButton">
+    💜 Save as My Current Song
+  </button>
+
+  <p id="currentSongStatus" role="status" aria-live="polite"></p>
+</section>
+
     <div class="grid">
       <section class="card">
         <h2>💌 Mystery Mail</h2>
