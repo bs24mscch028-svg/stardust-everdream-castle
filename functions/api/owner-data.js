@@ -42,13 +42,14 @@ export async function onRequestGet({ request, env }) {
     }
 
     // Only a verified owner session can reach these private queries.
-    const [
+   const [
   messagesResult,
   songsResult,
   moodsResult,
   visitsResult,
-  loveEntriesResult
-] =
+  loveEntriesResult,
+  keepsakeAnswersResult
+] = 
       await Promise.all([
         env.DB.prepare(
           `SELECT id, message, message_type, created_at
@@ -57,12 +58,19 @@ export async function onRequestGet({ request, env }) {
            LIMIT 500`
         ).all(),
 
-        env.DB.prepare(
-          `SELECT id, title, artist, song_url, note, created_at
-           FROM songs
-           ORDER BY id DESC
-           LIMIT 500`
-        ).all(),
+       env.DB.prepare(
+  `SELECT id, category, title, content, created_at
+   FROM love_entries
+   ORDER BY id DESC
+   LIMIT 500`
+).all(),
+
+env.DB.prepare(
+  `SELECT id, nickname, question, answer, created_at
+   FROM keepsake_answers
+   ORDER BY id DESC
+   LIMIT 500`
+).all(),
 
         env.DB.prepare(
           `SELECT id, mood, note, created_at
@@ -90,7 +98,8 @@ return Response.json(
     songs: songsResult.results || [],
     moods: moodsResult.results || [],
     visits: Number(visitsResult?.total || 0),
-    loveEntries: loveEntriesResult.results || []
+    loveEntries: loveEntriesResult.results || [],
+keepsakeAnswers: keepsakeAnswersResult.results || []
   },
   {
     headers: {
