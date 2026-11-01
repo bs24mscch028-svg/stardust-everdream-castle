@@ -963,6 +963,46 @@
     <p>These are planned milestones, not a live visitor count yet.</p>
   `,
 
+    keepsakes: `
+  <h2 id="modalTitle">✨ Stardust Keepsakes</h2>
+  <p>Every heart has a story. Every mind holds a universe. 💜</p>
+
+  <div class="card">
+    <label for="keepsakeCategory">🌙 Choose a category</label>
+    <select id="keepsakeCategory">
+      <option value="all">✨ All Questions</option>
+      <option value="about">🌷 Little Things About Me</option>
+      <option value="tell">💭 If You Could Tell Me Something</option>
+      <option value="dreams">🌠 Dreams, Wishes & Life</option>
+      <option value="feelings">💜 Feelings We Don't Always Say</option>
+      <option value="fun">🎀 Fun & Random Questions</option>
+      <option value="unwritten">🌌 The Unwritten Pages</option>
+    </select>
+
+    <div class="result" id="keepsakeQuestion" aria-live="polite">
+      ✨ Click below to discover your first question!
+    </div>
+
+    <button class="btn" type="button" id="pickKeepsakeQuestion">
+      ✨ Pick a Question for Me
+    </button>
+
+    <label for="keepsakeNickname">🦋 Your nickname (optional)</label>
+    <input id="keepsakeNickname" type="text"
+      maxlength="40" placeholder="What should I call you?">
+
+    <label for="keepsakeAnswer">💌 Your answer</label>
+    <textarea id="keepsakeAnswer" rows="5" maxlength="1500"
+      placeholder="Share your thoughts here..."></textarea>
+
+    <button class="btn" type="button" id="sendKeepsakeAnswer">
+      💜 Send My Answer
+    </button>
+
+    <p id="keepsakeStatus" role="status" aria-live="polite"></p>
+  </div>
+`,
+    
   royal: `
     <h2 id="modalTitle">👑 The Royal Chamber</h2>
     <p>Your private creator dashboard is planned for the next stage.</p>
