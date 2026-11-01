@@ -394,14 +394,33 @@ if (loveEntries.length === 0) {
     loveContainer.appendChild(card);
   });
 }
-      showText(
-          "visitorCount",
-          typeof data.visits === "number"
-            ? data.visits + " recorded visits"
-            : "Visitor count is not available yet."
-        );
+  
+try {
+  const visitorResponse = await fetch("/api/visitors", {
+    method: "GET",
+    cache: "no-store"
+  });
 
-        try {
+  const visitorData = await visitorResponse.json();
+
+  if (!visitorResponse.ok || !visitorData.success) {
+    throw new Error("Visitor count unavailable");
+  }
+
+  const totalVisits = Number(visitorData.total) || 0;
+
+  showText(
+    "visitorCount",
+    "✨ " + totalVisits.toLocaleString() + " recorded visits 🏰"
+  );
+} catch (error) {
+  showText(
+    "visitorCount",
+    "🌙 Visitor count is temporarily unavailable."
+  );
+}
+ 
+    try {
           const saved = localStorage.getItem("everdreamFavouriteSong");
 
           if (saved) {
