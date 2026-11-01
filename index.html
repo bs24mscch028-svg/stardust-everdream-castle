@@ -1958,6 +1958,111 @@ document.addEventListener("click", async function (event) {
   }
 });
 </script>
+  <script>
+async function loadCastleHeartbeat() {
+  const container = document.getElementById("publicCurrentSong");
+  if (!container) return;
+
+  try {
+    const response = await fetch("/api/current-song", {
+      cache: "no-store"
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success || !result.song) {
+      container.textContent =
+        "🌙 My castle's song is waiting to be chosen. Please visit again soon! 💜";
+      return;
+    }
+
+    const song = result.song;
+    const url = new URL(song.url);
+
+    container.replaceChildren();
+
+    if (song.source === "youtube") {
+      let videoId = "";
+
+      if (url.hostname === "youtu.be") {
+        videoId = url.pathname.slice(1).split("/")[0];
+      } else {
+        videoId = url.searchParams.get("v") || "";
+
+        if (!videoId && url.pathname.startsWith("/embed/")) {
+          videoId = url.pathname.split("/")[2] || "";
+        }
+
+        if (!videoId && url.pathname.startsWith("/shorts/")) {
+          videoId = url.pathname.split("/")[2] || "";
+        }
+      }
+
+      if (!/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
+        throw new Error("Please save a valid YouTube video link.");
+      }
+
+      const player = document.createElement("iframe");
+      player.src = "https://www.youtube-nocookie.com/embed/" + videoId;
+      player.title = "The Castle's Heartbeat — YouTube player";
+      player.width = "100%";
+      player.height = "200";
+      player.style.border = "0";
+      player.style.borderRadius = "16px";
+      player.allow =
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      player.allowFullscreen = true;
+
+      container.appendChild(player);
+
+    } else if (song.source === "spotify") {
+      if (
+        url.hostname !== "open.spotify.com" ||
+        !/^\/(track|album|playlist|episode|show)\//.test(url.pathname)
+      ) {
+        throw new Error("Please save a valid Spotify track, album, or playlist link.");
+      }
+
+      const player = document.createElement("iframe");
+      player.src = "https://open.spotify.com/embed" + url.pathname;
+      player.title = "The Castle's Heartbeat — Spotify player";
+      player.width = "100%";
+      player.height = "152";
+      player.style.border = "0";
+      player.style.borderRadius = "16px";
+      player.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
+
+      container.appendChild(player);
+
+    } else if (song.source === "audio") {
+      const player = document.createElement("audio");
+      player.controls = true;
+      player.preload = "none";
+      player.src = url.href;
+      player.style.width = "100%";
+
+      container.appendChild(player);
+
+    } else {
+      throw new Error("Unknown music source.");
+    }
+
+    const note = document.createElement("p");
+    note.className = "small";
+    note.textContent =
+      "💜 A song chosen especially for this castle. Press play to listen. ✨";
+
+    container.appendChild(note);
+
+  } catch (error) {
+    container.textContent =
+      "🌙 The song player couldn't load. Please check the saved song link.";
+    console.error("Castle music player:", error);
+  }
+}
+
+loadCastleHeartbeat();
+</script>
 </body>
  <!-- Stardust Everdream Castle update -->
 </html>
